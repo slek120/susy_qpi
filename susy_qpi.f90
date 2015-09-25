@@ -169,7 +169,14 @@ program susy_qpi
         write (log,*) "ERROR: DCUHRE exit code ", ifail
       end if
       close(log)
-      write(dat,*)  qx, qy, result(1), absest(1)
+      write(dat,*)  qx,  qy, result(1)
+      write(dat,*)  qy,  qx, result(1)
+      write(dat,*) -qy,  qx, result(1)
+      write(dat,*) -qx,  qy, result(1)
+      write(dat,*) -qx, -qy, result(1)
+      write(dat,*) -qy, -qx, result(1)      
+      write(dat,*)  qy, -qx, result(1)
+      write(dat,*)  qx, -qy, result(1)
       call flush(dat)
     end do
   end do
