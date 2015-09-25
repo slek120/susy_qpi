@@ -13,6 +13,9 @@ program susy_qpi
   implicit none
   include "inc/susy_qpi.f90"
 
+  open(10, file="susy_qpi.log", position="append", status="unknown")
+  write(10,*) "******************START: susy_qpi********************"
+  close(10)
 
 
 ! Set constants
@@ -45,10 +48,13 @@ program susy_qpi
     end do
   end do
 
+  open(10, file="susy_qpi.log", position="append", status="old")
+  write(10,*) "********************END: susy_qpi********************"
+  close(10)
 end program susy_qpi
 
 !==============================================================
-! write_data  Writes data to YYYYMMDD_HHSS_w=OMEGA_susy_qpi.dat
+! write_data  Writes data to OMEGA_susy_qpi.dat
 !   om        real part of frequency
 !   del       imaginary part of frequency
 !==============================================================
@@ -65,9 +71,10 @@ subroutine write_data(om, del)
   omega = dcmplx(om,del)
 
 ! Save results to file
-  open(log, file="susy_qpi.log", position="append", status="unknown")
+  open(log, file="susy_qpi.log", position="append", status="old")
   write(somega, '(f0.2,"+",f0.2,"i")') om, del
-  filename = date//"_"//time//"_w="//trim(somega)//"_susy_qpi.dat"
+!   filename = date//"_"//time//"_w="//trim(somega)//"_susy_qpi.dat"
+  filename = trim(somega)//"_susy_qpi.dat"
   write(log,*)
   write(log,*) "======================================================="
   write(log,*)
@@ -108,7 +115,7 @@ subroutine write_data(om, del)
 !     Log results
       if (ifail>0) then
         open(log, file="susy_qpi.log", position="append", status="old")
-        write (log,*) "ERROR: DCUHRE exit code ", ifail
+        write(log,*) "ERROR: DCUHRE exit code ", ifail
         close(log)
       end if
       write(dat,*)  qx,  qy, result(1)
@@ -171,15 +178,15 @@ subroutine sG0(ndim, z, nfun, f)
   call invert4x4(Gkinv, Gk, status)
   if ( status>0 ) then
     open(log, file="susy_qpi.log", position="append", status="old")
-    write (log,*) "ERROR: Singular matrix "
-    write (log,*) Gkinv
+    write(log,*) "ERROR: Singular matrix "
+    write(log,*) Gkinv
     close(log)
   end if
   call invert4x4(Gkqinv, Gkq, status)
   if ( status>0 ) then
     open(log, file="susy_qpi.log", position="append", status="old")
-    write (log,*) "ERROR: Singular matrix "
-    write (log,*) Gkqinv
+    write(log,*) "ERROR: Singular matrix "
+    write(log,*) Gkqinv
     close(log)
   end if
 
