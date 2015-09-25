@@ -1,7 +1,62 @@
 program susy_qpi
   implicit none
+
+! Double precision
   integer, parameter :: dp=kind(0.d0)
-  integer :: i,j
+
+! Global variables
+!   epsq = -2 * t ( cos(kx) + cos(ky) ) - mu
+!     t      real.
+!     mu     real.
+!   chiq = -2 * x0 ( cos(kx) + cos(ky) ) - epsf
+!     x0     real.
+!     epsf   real.
+!   Inv[G(k,omega)] = (omega)*I - H_k
+!     Gkinv  real array of dimension 16 (4x4 matrix)
+!            Inverse of Green function at k
+!     Gkqinv real array of dimension 16 (4x4 matrix)
+!            Inverse of Green function at k+q
+  common /gvars/ Pi, t, mu, x0, epsf, Gkinv, Gkqinv
+  real(dp)    :: Pi, t, mu, x0, epsf
+  complex(dp) :: Gkinv(16), Gkqinv(16)
+
+! Local variables
+  real(dp) :: V, Uc, Uf
+  integer  :: i, j, log=10
+
+! Set constants
+  Pi=4.0_dp*datan(1.0_dp)
+
+! Set experimental data
+  t   = 1_dp
+  mu  =-0.9_dp*t
+  x0  = 1e-2_dp
+  epsf=-0.9_dp*x0
+  V   = 1e-2_dp
+  Uc  = 1_dp
+  Uf  = 1e-3_dp
+
+  open(log, file="susy_qpi.log", position="append", status="unknown")
+  write(log, *) "t:     ", t
+  write(log, *) "mu:    ", mu
+  write(log, *) "x0:    ", x0
+  write(log, *) "epsf:  ", epsf
+  write(log, *) "V:     ", V
+  write(log, *) "Uc:    ", Uc
+  write(log, *) "Uf:    ", Uf
+  close(log)
+
+! Set up matrix as an array of size 16
+  Gkinv = (/ complex(dp) :: &
+       0,  V, -Uc,  0, &
+       V,  0,   0, Uf, &
+     -Uc,  0,   0,  V, &
+       0, Uf,   V,  0 /)
+  Gkqinv = (/ complex(dp) :: &
+       0,  V, -Uc,  0, &
+       V,  0,   0, Uf, &
+     -Uc,  0,   0,  V, &
+       0, Uf,   V,  0 /)
 
   do i=1,100
     do j=1,10
@@ -23,25 +78,12 @@ subroutine write_data(om, del)
   real(dp), intent(in) :: om, del
 
 ! Global variables
-!   epsq = -2 * t ( cos(kx) + cos(ky) ) - mu
-!     t      real.
-!     mu     real.
-!   chiq = -2 * x0 ( cos(kx) + cos(ky) ) - epsf
-!     x0     real.
-!     epsf   real.
-!   Inv[G(k,omega)] = (omega)*I - H_k
-!     Gkinv  real array of dimension 16 (4x4 matrix)
-!            Inverse of greens function
-!     Gkqinv real array of dimension 16 (4x4 matrix)
-!            Inverse of greens function at k+q
 !     omega  complex.
 !            Frequency (energy) used for G
-
-  common /gvars/      t, mu, x0, epsf, qx, qy, Pi, Gkinv, Gkqinv
-  real(dp)         :: t, mu, x0, epsf, qx, qy, Pi, Uc, Uf, V
-  complex(dp)      :: Gkinv(16), Gkqinv(16)
-  common /freq/       omega
-  complex(dp)      :: omega
+  common /gvars/ Pi, t, mu, x0, epsf, Gkinv, Gkqinv
+  common /freq/  omega, qx, qy
+  real(dp)    :: Pi, t, mu, x0, epsf, qx, qy
+  complex(dp) :: omega, Gkinv(16), Gkqinv(16)
 
 ! Local variables
 !     steps  integer.
@@ -54,6 +96,7 @@ subroutine write_data(om, del)
   character(len=4) :: time
   character(len=16):: somega
   character(len=64):: filename
+
 ! Variables for dcuhre
 !     ndim   integer.
 !            number of variables. 1 < ndim <=  15.
@@ -121,9 +164,6 @@ subroutine write_data(om, del)
   close(log)
   open(dat, file=filename, status="unknown")
 
-! Set constants
-  Pi=4.0_dp*datan(1.0_dp)
-
 ! Settings for dcuhre
   a(1) = -1.0_dp*Pi
   b(1) = Pi
@@ -134,40 +174,8 @@ subroutine write_data(om, del)
   abserr = 1e-6_dp
   relerr = 1e-3_dp
 
-! Set experimental data
-  t   = 1_dp
-  mu  =-0.9_dp*t
-  x0  = 1e-2_dp
-  epsf=-0.9_dp*x0
-  V   = 1e-2_dp
-  Uc  = 1_dp
-  Uf  = 1e-3_dp
-
 ! frequency
   omega = dcmplx(om,del)
-
-! Set up matrix as an array of size 16
-  Gkinv = (/ complex(dp) :: &
-       0,  V, -Uc,  0, &
-       V,  0,   0, Uf, &
-     -Uc,  0,   0,  V, &
-       0, Uf,   V,  0 /)
-  Gkqinv = (/ complex(dp) :: &
-       0,  V, -Uc,  0, &
-       V,  0,   0, Uf, &
-     -Uc,  0,   0,  V, &
-       0, Uf,   V,  0 /)
-
-  open(log, file="susy_qpi.log", position="append", status="old")
-  write(log, *) "t:     ", t
-  write(log, *) "mu:    ", mu
-  write(log, *) "x0:    ", x0
-  write(log, *) "epsf:  ", epsf
-  write(log, *) "V:     ", V
-  write(log, *) "Uc:    ", Uc
-  write(log, *) "Uf:    ", Uf
-  write(log, *) "omega: ", omega
-  close(log)
 
 ! Step through 1/8 triangle of BZ
   steps=100
@@ -188,20 +196,20 @@ subroutine write_data(om, del)
         close(log)
       end if
       write(dat,*)  qx,  qy, result(1)
-      write(dat,*)  qy,  qx, result(1)
-      write(dat,*) -qy,  qx, result(1)
+      write(dat,*)  qx, -qy, result(1)
       write(dat,*) -qx,  qy, result(1)
       write(dat,*) -qx, -qy, result(1)
-      write(dat,*) -qy, -qx, result(1)      
+      write(dat,*)  qy,  qx, result(1)
       write(dat,*)  qy, -qx, result(1)
-      write(dat,*)  qx, -qy, result(1)
+      write(dat,*) -qy,  qx, result(1)
+      write(dat,*) -qy, -qx, result(1)      
       call flush(dat)
     end do
   end do
 
   close(dat)
   open(log, file="susy_qpi.log", position="append", status="old")
-  write(log,*) "END: "//date//"_"//time//"_susy_qpi.dat"
+  write(log,*) "END: "//filename
   call cpu_time(end)
   write(log,*) "TOTAL TIME: ", end-start
   close(log)
@@ -222,16 +230,17 @@ subroutine sG0(ndim, z, nfun, f)
   real(dp), intent(out) :: f(nfun)
 
 ! Globar variables
-  common /gvars/    t, mu, x0, epsf, qx, qy, Pi, Gkinv, Gkqinv
-  real(dp)       :: t, mu, x0, epsf, qx, qy, Pi
-  complex(dp)    :: Gk(16), Gkq(16), Gkinv(16), Gkqinv(16)
-  common /freq/     omega
-  complex(dp)    :: omega
+  common /gvars/ Pi, t, mu, x0, epsf, Gkinv, Gkqinv
+  common /freq/  omega, qx, qy
+  real(dp)    :: Pi, t, mu, x0, epsf, qx, qy
+  complex(dp) :: omega, Gkinv(16), Gkqinv(16)
 
 ! Local variables
-  integer        :: status, log=10
-  real(dp)       :: kx, ky, kqx, kqy
-  real(dp)       :: epsk, epskpQ, epskq, epskqpQ, chik, chikq, chikpQ, chikqpQ
+  integer     :: status, log=10
+  real(dp)    :: kx, ky, kqx, kqy, &
+                 epsk, epskpQ, epskq, epskqpQ, &
+                 chik, chikq, chikpQ, chikqpQ
+  complex(dp) :: Gk(16), Gkq(16)
 
   kx = z(1)
   ky = z(2)
