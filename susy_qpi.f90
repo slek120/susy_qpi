@@ -1,9 +1,26 @@
 program susy_qpi
   implicit none
+  integer, parameter :: dp=kind(0.d0)
+  integer :: i,j
+
+  do i=1,100
+    do j=1,10
+      call write_data(i*0.5_dp,j*0.2_dp)
+    end do
+  end do
+
+end program susy_qpi
+
+subroutine write_data(om, del)
+  implicit none
   external sG0
 
 ! Double precision
   integer, parameter :: dp=kind(0.d0)
+
+! Parameters
+!    omega = om + i * del
+  real(dp), intent(in) :: om, del
 
 ! Global variables
 !   epsq = -2 * t ( cos(kx) + cos(ky) ) - mu
@@ -35,7 +52,8 @@ program susy_qpi
   real             :: start, end
   character(len=8) :: date
   character(len=4) :: time
-
+  character(len=16):: somega
+  character(len=64):: filename
 ! Variables for dcuhre
 !     ndim   integer.
 !            number of variables. 1 < ndim <=  15.
@@ -94,12 +112,14 @@ program susy_qpi
 
 ! Save results to file
   open(log, file="susy_qpi.log", position="append", status="unknown")
+  write(somega, '(f6.2,"+",f6.2,"i")') om, del
+  filename = date//"_"//time//"_w="//trim(somega)//"_susy_qpi.dat"
   write(log,*)
   write(log,*) "======================================================="
   write(log,*)
-  write(log,*) "START: "//date//"_"//time//"_susy_qpi.dat"
+  write(log,*) "START: "//filename
   close(log)
-  open(dat, file=date//"_"//time//"_susy_qpi.dat", status="unknown")
+  open(dat, file=filename, status="unknown")
 
 ! Set constants
   Pi=4.0_dp*datan(1.0_dp)
@@ -124,7 +144,7 @@ program susy_qpi
   Uf  = 1e-3_dp
 
 ! frequency
-  omega = dcmplx(20.0_dp,0.5_dp)
+  omega = dcmplx(om,del)
 
 ! Set up matrix as an array of size 16
   Gkinv = (/ complex(dp) :: &
@@ -186,7 +206,7 @@ program susy_qpi
   write(log,*) "TOTAL TIME: ", end-start
   close(log)
 
-end program susy_qpi
+end subroutine write_data
 
 !==============================================================
 
