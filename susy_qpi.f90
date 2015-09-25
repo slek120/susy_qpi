@@ -139,14 +139,14 @@ program susy_qpi
        0, Uf,   V,  0 /)
 
   open(log, file="susy_qpi.log", position="append", status="old")
-  write(log, *) "t:", t
-  write(log, *) "mu:", mu
-  write(log, *) "x0:", x0
-  write(log, *) "epsf:", epsf
-  write(log, *) "V:", V
-  write(log, *) "Uc:", Uc
-  write(log, *) "Uf:", Uf
-  write(log, *) "omega:", omega
+  write(log, *) "t:     ", t
+  write(log, *) "mu:    ", mu
+  write(log, *) "x0:    ", x0
+  write(log, *) "epsf:  ", epsf
+  write(log, *) "V:     ", V
+  write(log, *) "Uc:    ", Uc
+  write(log, *) "Uf:    ", Uf
+  write(log, *) "omega: ", omega
   close(log)
 
 ! Step through 1/8 triangle of BZ
@@ -162,13 +162,11 @@ program susy_qpi
                   abserr, relerr, 0, nwork, 0, result,&
                   absest, neval, ifail, work)
 !     Log results
-      call cpu_time(end)
-      open(log, file="susy_qpi.log", position="append", status="old")
-      write(log,'("CURRENT STEP: ",i3,i3," TIME: ",f6.3)') iqx, iqy, end-start
       if (ifail>0) then
+        open(log, file="susy_qpi.log", position="append", status="old")
         write (log,*) "ERROR: DCUHRE exit code ", ifail
+        close(log)
       end if
-      close(log)
       write(dat,*)  qx,  qy, result(1)
       write(dat,*)  qy,  qx, result(1)
       write(dat,*) -qy,  qx, result(1)
@@ -184,6 +182,8 @@ program susy_qpi
   close(dat)
   open(log, file="susy_qpi.log", position="append", status="old")
   write(log,*) "END: "//date//"_"//time//"_susy_qpi.dat"
+  call cpu_time(end)
+  write(log,*) "TOTAL TIME: "  end-start
   close(log)
 
 end program susy_qpi
