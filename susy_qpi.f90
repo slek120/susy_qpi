@@ -183,7 +183,7 @@ program susy_qpi
   open(log, file="susy_qpi.log", position="append", status="old")
   write(log,*) "END: "//date//"_"//time//"_susy_qpi.dat"
   call cpu_time(end)
-  write(log,*) "TOTAL TIME: "  end-start
+  write(log,*) "TOTAL TIME: ", end-start
   close(log)
 
 end program susy_qpi
