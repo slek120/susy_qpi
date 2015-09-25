@@ -16,13 +16,12 @@ program susy_qpi
 !            Inverse of Green function at k
 !     Gkqinv real array of dimension 16 (4x4 matrix)
 !            Inverse of Green function at k+q
-  common /gvars/ Pi, t, mu, x0, epsf, Gkinv, Gkqinv
-  real(dp)    :: Pi, t, mu, x0, epsf
+  common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
+  real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf
   complex(dp) :: Gkinv(16), Gkqinv(16)
 
 ! Local variables
-  real(dp) :: V, Uc, Uf
-  integer  :: i, j, log=10
+  integer  :: i, j
 
 ! Set constants
   Pi=4.0_dp*datan(1.0_dp)
@@ -35,16 +34,6 @@ program susy_qpi
   V   = 1e-2_dp
   Uc  = 1_dp
   Uf  = 1e-3_dp
-
-  open(log, file="susy_qpi.log", position="append", status="unknown")
-  write(log, *) "t:     ", t
-  write(log, *) "mu:    ", mu
-  write(log, *) "x0:    ", x0
-  write(log, *) "epsf:  ", epsf
-  write(log, *) "V:     ", V
-  write(log, *) "Uc:    ", Uc
-  write(log, *) "Uf:    ", Uf
-  close(log)
 
 ! Set up matrix as an array of size 16
   Gkinv = (/ complex(dp) :: &
@@ -80,9 +69,9 @@ subroutine write_data(om, del)
 ! Global variables
 !     omega  complex.
 !            Frequency (energy) used for G
-  common /gvars/ Pi, t, mu, x0, epsf, Gkinv, Gkqinv
+  common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
   common /freq/  omega, qx, qy
-  real(dp)    :: Pi, t, mu, x0, epsf, qx, qy
+  real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf, qx, qy
   complex(dp) :: omega, Gkinv(16), Gkqinv(16)
 
 ! Local variables
@@ -153,14 +142,25 @@ subroutine write_data(om, del)
   call cpu_time(start)
   call date_and_time(date,time)
 
+! frequency
+  omega = dcmplx(om,del)
+
 ! Save results to file
   open(log, file="susy_qpi.log", position="append", status="unknown")
-  write(somega, '(f6.2,"+",f6.2,"i")') om, del
+  write(somega, '(f0.2,"+",f0.2,"i")') om, del
   filename = date//"_"//time//"_w="//trim(somega)//"_susy_qpi.dat"
   write(log,*)
   write(log,*) "======================================================="
   write(log,*)
   write(log,*) "START: "//filename
+  write(log, *) "t:     ", t
+  write(log, *) "mu:    ", mu
+  write(log, *) "x0:    ", x0
+  write(log, *) "epsf:  ", epsf
+  write(log, *) "V:     ", V
+  write(log, *) "Uc:    ", Uc
+  write(log, *) "Uf:    ", Uf
+  write(log, *) "omega: ", omega
   close(log)
   open(dat, file=filename, status="unknown")
 
@@ -173,9 +173,6 @@ subroutine write_data(om, del)
   maxpts = 60000000
   abserr = 1e-6_dp
   relerr = 1e-3_dp
-
-! frequency
-  omega = dcmplx(om,del)
 
 ! Step through 1/8 triangle of BZ
   steps=100
@@ -230,9 +227,9 @@ subroutine sG0(ndim, z, nfun, f)
   real(dp), intent(out) :: f(nfun)
 
 ! Globar variables
-  common /gvars/ Pi, t, mu, x0, epsf, Gkinv, Gkqinv
+  common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
   common /freq/  omega, qx, qy
-  real(dp)    :: Pi, t, mu, x0, epsf, qx, qy
+  real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf, qx, qy
   complex(dp) :: omega, Gkinv(16), Gkqinv(16)
 
 ! Local variables
