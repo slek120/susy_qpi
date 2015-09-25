@@ -1,0 +1,87 @@
+\documentclass[11pt, oneside]{article} 
+\usepackage{amsmath}
+\begin{document}
+
+\section{Bogoliubov Tranformation for the Kondo Lattice}
+
+We start from the Hamiltonian for the Kondo lattice
+
+$$ H = - \sum_{i,\sigma} t_{ij}c_{i\sigma}^\dagger c_{j\sigma} + 
+J \sum_r \mathbf{S}_r\cdot \mathbf{s}_r +
+\sum_{\langle r, s \rangle} I_{rs} \mathbf{S}_r \cdot \mathbf{S}_s $$
+
+where $\mathbf{S}_{i},\mathbf{s}_{i}$ are the spin operators for the
+localized $f$-electrons and the itinerant $d$-electrons.
+Next, we use that
+
+$$ \mathbf{S}_{r}=\mathbf{S}_{r}^{f}+\mathbf{S}_{r}^{b} $$
+
+representing the fermionic and bosonic components of the spin. For the
+fermionic component, we use
+
+$$ \mathbf{S}_{r}^{f} =\frac{1}{2}\sum_{\alpha ,\beta }f_{r,\alpha }^{\dagger
+}\mathbf{\sigma }_{\alpha \beta }f_{r,\beta } $$
+
+$$ \mathbf{s}_{r} =\frac{1}{2}\sum_{\alpha ,\beta }c_{r,\alpha }^{\dagger }
+\mathbf{\sigma }_{\alpha \beta }c_{r,\beta } $$
+
+We will assume that the bosonic part of the spins orders
+antiferromagnetically, and hence use the Holstein-Primakoff transformation
+on the $A$ sublattice
+
+$$ S_{r}^{z} = S-a_{r}^{\dagger }a_{r} $$
+$$ S_{r}^{+} = \sqrt{2S}\sqrt{1-\frac{a_{r}^{\dagger }a_{r}}{2S}}a_{r} $$
+$$ S_{r}^{-} = \sqrt{2S}a_{r}^{\dagger }\sqrt{1-\frac{a_{r}^{\dagger }a_{r}}{2S}} $$
+
+and on the $B$ sublattice
+
+$$ S_{r}^{z} = -S+a_{r}^{\dagger }a_{r} $$
+$$ S_{r}^{-} = \sqrt{2S}a_{r}^{\dagger }\sqrt{1-\frac{a_{r}^{\dagger }a_{r}}{2S}} $$
+$$ S_{r}^{+} = \sqrt{2S}\sqrt{1-\frac{a_{r}^{\dagger }a_{r}}{2S}}a_{r} $$
+
+
+
+We obtain
+
+$$ H_{MF}=\sum_{k}
+\left(\begin{array}{cccc}
+c_{k,\sigma }^{\dagger } & f_{k,\sigma }^{\dagger } & c_{k+Q,\sigma
+}^{\dagger } & f_{k+Q,\sigma }^{\dagger }
+\end{array} \right) 
+\left( \begin{array}{cccc}
+\varepsilon _{k} & -V & U_{c} & 0 \\
+-V & \chi _{k} & 0 & U_{f} \\
+U_{c} & 0 & \varepsilon _{k+Q} & -V \\
+0 & U_{f} & -V & \chi _{k+Q}
+\end{array}\right)
+\left(\begin{array}{c}
+c_{k,\sigma } \\
+f_{k,\sigma } \\
+c_{k+Q,\sigma } \\
+f_{k+Q,\sigma }
+\end{array}\right) $$
+
+$$ \hat{H_k} = 
+\left( \begin{array}{cccc}
+\varepsilon _{k} & -V & U_{c} & 0 \\
+-V & \chi _{k} & 0 & U_{f} \\
+U_{c} & 0 & \varepsilon _{k+Q} & -V \\
+0 & U_{f} & -V & \chi _{k+Q}
+\end{array}\right) $$
+
+Where
+
+\begin{eqnarray*}
+\varepsilon_k &=& -2 \cdot t (\cos(k_x) + \cos(k_y)) - \mu \\
+\chi_k &=& -2 \cdot \chi_0 (\cos(k_x) + \cos(k_y)) - \varepsilon_f \\
+V &=& \frac{J N}{4} \sum_{q,\alpha} \langle f_{q\alpha}^\dagger c_{q\alpha} \rangle \\
+U_c &=& \frac{J S}{2} sgn(\sigma) \\
+U_f &=& \frac{I S}{2} sgn(\sigma)
+\end{eqnarray*}
+
+Then the Green's function matrix is defined as
+$$ \hat{G_R}(k,\omega_n+i\delta) = [(\omega_n+i\delta)\hat{I} - \hat{H_k}]^{-1} $$
+From which we calculate the QPI spectrum
+$$ g(q,\omega)=\int \frac{d^2x}{(2 \pi)^2} [\hat{G_R}(k,\omega)]_{11}[\hat{G_R}(k+q,\omega)]_{11} $$
+
+\end{document}  
