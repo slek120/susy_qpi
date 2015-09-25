@@ -30,5 +30,5 @@ watch the log during execution with this command
 
 YYYYMMDD\_HHSS\_susy\_qpi.dat has data in the format
 
-| qx | qy | g(qx,qy,w) | estimated error |
-|----|----|------------|-----------------|
+| qx | qy | g(qx,qy,w) |
+|----|----|------------|
