@@ -1,3 +1,14 @@
+! Susy QPI
+! This program outputs data used to chart
+! the QPI spectrum of the Kondo Lattice Model
+! using a supersymmetric representation
+! 
+! by Eric Mascot
+! 
+!==============================================================
+! susy_qpi    Set experimental data and frequency
+!==============================================================
+
 program susy_qpi
   implicit none
 
@@ -54,6 +65,12 @@ program susy_qpi
   end do
 
 end program susy_qpi
+
+!==============================================================
+! write_data  Writes data to YYYYMMDD_HHSS_w=OMEGA_susy_qpi.dat
+!   om        real part of frequency
+!   del       imaginary part of frequency
+!==============================================================
 
 subroutine write_data(om, del)
   implicit none
@@ -213,6 +230,12 @@ subroutine write_data(om, del)
 
 end subroutine write_data
 
+!==============================================================
+! sG0         Integrand for dcuhre
+!   ndim      number of variables
+!   z         variables for integration
+!   nfun      number of components of integral
+!   f         value of integrand
 !==============================================================
 
 subroutine sG0(ndim, z, nfun, f)
