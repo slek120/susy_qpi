@@ -28,7 +28,9 @@ watch the log during execution with this command
 
     tail -f susy_qpi.log
 
-YYYYMMDD\_HHSS\_susy\_qpi.dat has data in the format
+YYYYMMDD\_HHMM/data.txt has the experimental data
+
+YYYYMMDD\_HHMM/w=OMEGA\_susy\_qpi.dat has data in the format
 
 | qx | qy | g(qx,qy,w) |
 |----|----|------------|

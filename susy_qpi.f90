@@ -30,6 +30,20 @@ program susy_qpi
   Uc  = 1_dp
   Uf  = 1e-3_dp
 
+! Make directory YYYYMMDD_HHMM
+  call date_and_time(date,time)
+  call system("mkdir -p "//date//"_"//time )
+! Write experimental data to data.txt
+  open(10, file=date//"_"//time//"/data.txt", status="new")
+  write(10, *) "t:     ", t
+  write(10, *) "mu:    ", mu
+  write(10, *) "x0:    ", x0
+  write(10, *) "epsf:  ", epsf
+  write(10, *) "V:     ", V
+  write(10, *) "Uc:    ", Uc
+  write(10, *) "Uf:    ", Uf
+  close(10)
+
 ! Set up matrix as an array of size 16
   Gkinv = (/ complex(dp) :: &
        0,  V, -Uc,  0, &
@@ -65,30 +79,22 @@ subroutine write_data(om, del)
 
 ! Start timer
   call cpu_time(start)
-  call date_and_time(date,time)
 
 ! frequency
   omega = dcmplx(om,del)
 
-! Save results to file
+! Start log
   open(log, file="susy_qpi.log", position="append", status="old")
-  write(somega, '(f0.2,"+",f0.2,"i")') om, del
-!   filename = date//"_"//time//"_w="//trim(somega)//"_susy_qpi.dat"
-  filename = trim(somega)//"_susy_qpi.dat"
   write(log,*)
   write(log,*) "======================================================="
   write(log,*)
   write(log,*) "START: "//filename
-  write(log, *) "t:     ", t
-  write(log, *) "mu:    ", mu
-  write(log, *) "x0:    ", x0
-  write(log, *) "epsf:  ", epsf
-  write(log, *) "V:     ", V
-  write(log, *) "Uc:    ", Uc
-  write(log, *) "Uf:    ", Uf
-  write(log, *) "omega: ", omega
   close(log)
-  open(dat, file=filename, status="unknown")
+
+! Save results to OMEGA_susy_qpi.dat
+  write(somega, '("w=",f0.2,"+",f0.2,"i")') om, del
+  filename = date//"_"//time//"/"//trim(somega)//"_susy_qpi.dat"
+  open(dat, file=filename, status="new")
 
 ! Settings for dcuhre
   a(1) = -1.0_dp*Pi
@@ -108,7 +114,7 @@ subroutine write_data(om, del)
     qx=iqx*qstep
     do iqy = 0,iqx
       qy=iqy*qstep
-!     Integrate sG0 subroutine and write results to file
+!     Integrate sG0 subroutine
       call dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
                   abserr, relerr, 0, nwork, 0, result,&
                   absest, neval, ifail, work)

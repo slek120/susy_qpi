@@ -13,8 +13,11 @@ real(dp), intent(in) :: om, del
 !            Frequency (energy) used for G
 common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
 common /freq/  omega, qx, qy
+common /date/  date, time
 real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf, qx, qy
 complex(dp) :: omega, Gkinv(16), Gkqinv(16)
+character(len=8) :: date
+character(len=4) :: time
 
 ! Local variables
 !     steps  integer.
@@ -23,8 +26,6 @@ complex(dp) :: omega, Gkinv(16), Gkqinv(16)
 real(dp)         :: qstep
 integer          :: steps, iqx, iqy, log=10, dat=20
 real             :: start, end
-character(len=8) :: date
-character(len=4) :: time
 character(len=16):: somega
 character(len=64):: filename
 

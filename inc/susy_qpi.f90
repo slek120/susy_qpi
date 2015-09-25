@@ -14,8 +14,11 @@ integer, parameter :: dp=kind(0.d0)
 !     Gkqinv real array of dimension 16 (4x4 matrix)
 !            Inverse of Green function at k+q
 common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
+common /date/  date, time
 real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf
 complex(dp) :: Gkinv(16), Gkqinv(16)
+character(len=8) :: date
+character(len=4) :: time
 
 ! Local variables
 integer  :: i, j
