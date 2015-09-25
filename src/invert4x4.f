@@ -161,8 +161,10 @@ c      end program example
      +          m(9) * m(2) * m(7)  -
      +          m(9) * m(3) * m(6)
 
-      det = m(1) * inv(1) + m(2) * inv(5) +
-     +      m(3) * inv(9) + m(4) * inv(13)
+      det = m(1) * inv(1) +
+     +      m(2) * inv(5) +
+     +      m(3) * inv(9) +
+     +      m(4) * inv(13)
 
       if (det.eq.0) then
           fail = 1
