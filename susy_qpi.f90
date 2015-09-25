@@ -1,5 +1,5 @@
 ! Susy QPI
-! This program outputs data used to chart
+! This program outputs data used to plot
 ! the QPI spectrum of the Kondo Lattice Model
 ! using a supersymmetric representation
 ! 
@@ -13,8 +13,10 @@ program susy_qpi
   implicit none
   include "inc/susy_qpi.f90"
 
+  call date_and_time(date,time)
   open(10, file="susy_qpi.log", position="append", status="unknown")
   write(10,*) "******************START: susy_qpi********************"
+  write(10,*) "DATE: "//date//" TIME: "//time
   close(10)
 
 
@@ -31,7 +33,6 @@ program susy_qpi
   Uf  = 1e-3_dp
 
 ! Make directory YYYYMMDD_HHMM
-  call date_and_time(date,time)
   call system("mkdir -p "//date//"_"//time )
 ! Write experimental data to data.txt
   open(10, file=date//"_"//time//"/data.txt", status="new")
