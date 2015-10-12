@@ -127,16 +127,17 @@ subroutine write_data(om, del)
         write(log,*) "ERROR: DCUHRE exit code ", ifail
         close(log)
       end if
-      write(dat,*)  qx,  qy, result(1)
-      write(dat,*)  qx, -qy, result(1)
-      write(dat,*) -qx,  qy, result(1)
-      write(dat,*) -qx, -qy, result(1)
-      write(dat,*)  qy,  qx, result(1)
-      write(dat,*)  qy, -qx, result(1)
-      write(dat,*) -qy,  qx, result(1)
-      write(dat,*) -qy, -qx, result(1)      
+      write(dat,*)  qx,  qy, dabs(result(1))
+!       write(dat,*)  qx, -qy, dabs(result(1))
+!       write(dat,*) -qx,  qy, dabs(result(1))
+!       write(dat,*) -qx, -qy, dabs(result(1))
+!       write(dat,*)  qy,  qx, dabs(result(1))
+!       write(dat,*)  qy, -qx, dabs(result(1))
+!       write(dat,*) -qy,  qx, dabs(result(1))
+!       write(dat,*) -qy, -qx, dabs(result(1))
       call flush(dat)
     end do
+    write(dat,*)
   end do
 
   close(dat)
@@ -146,6 +147,9 @@ subroutine write_data(om, del)
   write(log,*) "TOTAL TIME: ", end-start
   close(log)
 
+  call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
+    'set view map scale 1; set xrange [0:pi]; set yrange [0:pi];'//&
+    'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
 end subroutine write_data
 
 !==============================================================
