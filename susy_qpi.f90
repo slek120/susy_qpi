@@ -65,6 +65,8 @@ program susy_qpi
 
   open(10, file="susy_qpi.log", position="append", status="old")
   write(10,*) "********************END: susy_qpi********************"
+  write(10,*)
+  write(10,*)
   close(10)
 end program susy_qpi
 
@@ -84,6 +86,11 @@ subroutine write_data(om, del)
 ! frequency
   omega = dcmplx(om,del)
 
+! Save results to OMEGA_susy_qpi.dat
+  write(somega, '("w=",f0.2,"+",f0.2,"i")') om, del
+  filename = date//"_"//time//"/"//trim(somega)//"_susy_qpi.dat"
+  open(dat, file=filename, status="new")
+
 ! Start log
   open(log, file="susy_qpi.log", position="append", status="old")
   write(log,*)
@@ -91,11 +98,6 @@ subroutine write_data(om, del)
   write(log,*)
   write(log,*) "START: "//filename
   close(log)
-
-! Save results to OMEGA_susy_qpi.dat
-  write(somega, '("w=",f0.2,"+",f0.2,"i")') om, del
-  filename = date//"_"//time//"/"//trim(somega)//"_susy_qpi.dat"
-  open(dat, file=filename, status="new")
 
 ! Settings for dcuhre
   a(1) = -1.0_dp*Pi
