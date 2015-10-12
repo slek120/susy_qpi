@@ -25,12 +25,12 @@ program susy_qpi
 
 ! Set experimental data
   t   = 1_dp
-  mu  =-0.9_dp*t
+  mu  = 0.5_dp*t
   x0  = 1e-2_dp
-  epsf=-0.9_dp*x0
-  V   = 1e-2_dp
-  Uc  = 1_dp
-  Uf  = 1e-3_dp
+  epsf= 0.5_dp*x0
+  V   = 0
+  Uc  = 0
+  Uf  = 0
 
 ! Make directory YYYYMMDD_HHMM
   call system("mkdir -p "//date//"_"//time )
