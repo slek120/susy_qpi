@@ -45,6 +45,8 @@ program susy_qpi
   write(10, *) "Uf:    ", Uf
   close(10)
 
+do i=0,10
+  V = i*0.01
 ! Set up matrix as an array of size 16
   Gkinv = (/ complex(dp) :: &
        0,  V, -Uc,  0, &
@@ -57,9 +59,8 @@ program susy_qpi
      -Uc,  0,   0,  V, &
        0, Uf,   V,  0 /)
 
-  do i=1,100
-    do j=1,10
-      call write_data(i*0.5_dp,j*0.2_dp)
+    do j=0,20
+      call write_data(j*0.1_dp,0.1_dp)
     end do
   end do
 
@@ -87,8 +88,8 @@ subroutine write_data(om, del)
   omega = dcmplx(om,del)
 
 ! Save results to OMEGA_susy_qpi.dat
-  write(somega, '("w=",f0.2,"+",f0.2,"i")') om, del
-  filename = date//"_"//time//"/"//trim(somega)//"_susy_qpi.dat"
+  write(somega, '("v=", f0.2, "w=", f0.2, "+", f0.2, "i")') v, om, del
+  filename = date//"_"//time//"/"//trim(somega)//".dat"
   open(dat, file=filename, status="new")
 
 ! Start log
@@ -147,6 +148,7 @@ subroutine write_data(om, del)
   write(log,*) "TOTAL TIME: ", end-start
   close(log)
 
+! Export plot to png
   call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
     'set view map scale 1; set xrange [0:pi]; set yrange [0:pi];'//&
     'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
