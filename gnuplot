@@ -7,6 +7,7 @@ set output 'test.png'
 set view map scale 1
 set xrange [0:pi]
 set yrange [0:pi]
+set size square
 unset surface 
 set pm3d
 
