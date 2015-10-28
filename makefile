@@ -20,4 +20,4 @@ csqlite.o : src/csqlite.c
 	$(CC) $(CFLAGS) -c src/csqlite.c -DLOWERCASE -Isrc/sqlite
 
 sqlite3.o : src/sqlite/sqlite3.c
-	$(CC) -Wl,-trace-symbol=pthread_mutexattr_settype -Wl,-trace-symbol=pthread_mutexattr_init -Wl,-trace-symbol=pthread_mutex_trylock -c src/sqlite/sqlite3.c -pthread
+	$(CC) $(CFLAGS) -c src/sqlite/sqlite3.c
