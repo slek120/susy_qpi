@@ -46,7 +46,7 @@ program susy_qpi
      -Uc,  0,   0,  V, &
        0, Uf,   V,  0 /)
 
-  call write_data(0.5_dp,0.5_dp)
+  call write_data(0.0_dp,1.0_dp)
 
   open(10, file="susy_qpi.log", position="append", status="old")
     write(10,*) "********************END: susy_qpi********************"
