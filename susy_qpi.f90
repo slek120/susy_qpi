@@ -15,8 +15,9 @@ program susy_qpi
 
   call date_and_time(date,time)
   open(10, file="susy_qpi.log", position="append", status="unknown")
-  write(10,*) "******************START: susy_qpi********************"
-  write(10,*) "DATE: "//date//" TIME: "//time
+    write(10,*)
+    write(10,*) "******************START: susy_qpi********************"
+    write(10,*) "DATE: "//date//" TIME: "//time
   close(10)
 
 
@@ -28,25 +29,11 @@ program susy_qpi
   mu  = 0.5_dp*t
   x0  = 1e-2_dp
   epsf= 0.5_dp*x0
-  V   = 0
-  Uc  = 0
-  Uf  = 0
+  V   = 0_dp
+  Uc  = 0_dp
+  Uf  = 0_dp
+  V = 0.1_dp
 
-! Make directory YYYYMMDD_HHMM
-  call system("mkdir -p "//date//"_"//time )
-! Write experimental data to data.txt
-  open(10, file=date//"_"//time//"/data.txt", status="new")
-  write(10, *) "t:     ", t
-  write(10, *) "mu:    ", mu
-  write(10, *) "x0:    ", x0
-  write(10, *) "epsf:  ", epsf
-  write(10, *) "V:     ", V
-  write(10, *) "Uc:    ", Uc
-  write(10, *) "Uf:    ", Uf
-  close(10)
-
-do i=0,10
-  V = i*0.01
 ! Set up matrix as an array of size 16
   Gkinv = (/ complex(dp) :: &
        0,  V, -Uc,  0, &
@@ -59,15 +46,11 @@ do i=0,10
      -Uc,  0,   0,  V, &
        0, Uf,   V,  0 /)
 
-    do j=0,20
-      call write_data(j*0.1_dp,0.1_dp)
-    end do
-  end do
+  call write_data(0.5_dp,0.5_dp)
 
   open(10, file="susy_qpi.log", position="append", status="old")
-  write(10,*) "********************END: susy_qpi********************"
-  write(10,*)
-  write(10,*)
+    write(10,*) "********************END: susy_qpi********************"
+    write(10,*)
   close(10)
 end program susy_qpi
 
@@ -78,6 +61,7 @@ end program susy_qpi
 !==============================================================
 
 subroutine write_data(om, del)
+  use sqlite
   implicit none
   include "inc/write_data.f90"
 
@@ -87,17 +71,50 @@ subroutine write_data(om, del)
 ! frequency
   omega = dcmplx(om,del)
 
-! Save results to OMEGA_susy_qpi.dat
-  write(somega, '("v=", f0.2, "w=", f0.2, "+", f0.2, "i")') v, om, del
-  filename = date//"_"//time//"/"//trim(somega)//".dat"
-  open(dat, file=filename, status="new")
+! Set column properties for sqlite
+  call sqlite3_open( 'data.db', db )
+  allocate( column(15) )
+  call sqlite3_column_props( column(1), "t", SQLITE_REAL )
+  call sqlite3_column_props( column(2), "mu", SQLITE_REAL )
+  call sqlite3_column_props( column(3), "x0", SQLITE_REAL )
+  call sqlite3_column_props( column(4), "epsf", SQLITE_REAL )
+  call sqlite3_column_props( column(5), "V", SQLITE_REAL )
+  call sqlite3_column_props( column(6), "Uc", SQLITE_REAL )
+  call sqlite3_column_props( column(7), "Uf", SQLITE_REAL )
+  call sqlite3_column_props( column(8), "omega", SQLITE_REAL )
+  call sqlite3_column_props( column(9), "delta", SQLITE_REAL )
+  call sqlite3_column_props( column(10), "qx", SQLITE_REAL )
+  call sqlite3_column_props( column(11), "qy", SQLITE_REAL )
+  call sqlite3_column_props( column(12), "result", SQLITE_REAL )
+  call sqlite3_column_props( column(13), "absresult", SQLITE_REAL )
+  call sqlite3_column_props( column(14), "date", SQLITE_CHAR, 8 )
+  call sqlite3_column_props( column(15), "time", SQLITE_CHAR, 4 )
+  call sqlite3_create_table( db, "susy_qpi", column)
+
+  call sqlite3_set_column( column(1), t )
+  call sqlite3_set_column( column(2), mu )
+  call sqlite3_set_column( column(3), x0 )
+  call sqlite3_set_column( column(4), epsf )
+  call sqlite3_set_column( column(5), V )
+  call sqlite3_set_column( column(6), Uc )
+  call sqlite3_set_column( column(7), Uf )
+  call sqlite3_set_column( column(8), om )
+  call sqlite3_set_column( column(9), del )
+  call sqlite3_set_column( column(14), date )
+  call sqlite3_set_column( column(15), time )
 
 ! Start log
   open(log, file="susy_qpi.log", position="append", status="old")
-  write(log,*)
-  write(log,*) "======================================================="
-  write(log,*)
-  write(log,*) "START: "//filename
+    write(log,*)
+    write(log,*) "======================================"
+    write(log,*) "t:     ", t
+    write(log,*) "mu:    ", mu
+    write(log,*) "x0:    ", x0
+    write(log,*) "epsf:  ", epsf
+    write(log,*) "V:     ", V
+    write(log,*) "Uc:    ", Uc
+    write(log,*) "Uf:    ", Uf
+    write(log,*) "omega: ", omega
   close(log)
 
 ! Settings for dcuhre
@@ -128,30 +145,72 @@ subroutine write_data(om, del)
         write(log,*) "ERROR: DCUHRE exit code ", ifail
         close(log)
       end if
-      write(dat,*)  qx,  qy, dabs(result(1))
-!       write(dat,*)  qx, -qy, dabs(result(1))
-!       write(dat,*) -qx,  qy, dabs(result(1))
-!       write(dat,*) -qx, -qy, dabs(result(1))
-!       write(dat,*)  qy,  qx, dabs(result(1))
-!       write(dat,*)  qy, -qx, dabs(result(1))
-!       write(dat,*) -qy,  qx, dabs(result(1))
-!       write(dat,*) -qy, -qx, dabs(result(1))
-      call flush(dat)
+
+      call sqlite3_begin( db )
+
+      call sqlite3_set_column( column(10), qx )
+      call sqlite3_set_column( column(11), qy )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), -qx )
+      call sqlite3_set_column( column(11), qy )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), qx )
+      call sqlite3_set_column( column(11), -qy )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), -qx )
+      call sqlite3_set_column( column(11), -qy )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), qy )
+      call sqlite3_set_column( column(11), qx )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), qy )
+      call sqlite3_set_column( column(11), -qx )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), -qy )
+      call sqlite3_set_column( column(11), qx )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_set_column( column(10), -qy )
+      call sqlite3_set_column( column(11), -qx )
+      call sqlite3_set_column( column(12), result(1) )
+      call sqlite3_set_column( column(13), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi', column )
+
+      call sqlite3_commit( db )
     end do
-    write(dat,*)
   end do
 
-  close(dat)
+  call sqlite3_close( db )
+
   open(log, file="susy_qpi.log", position="append", status="old")
-  write(log,*) "END: "//filename
-  call cpu_time(end)
-  write(log,*) "TOTAL TIME: ", end-start
+    call cpu_time(end)
+    write(log,*) "CALCULATION TIME: ", end-start
   close(log)
 
 ! Export plot to png
-  call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
-    'set view map scale 1; set xrange [0:pi]; set yrange [0:pi];'//&
-    'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
+!   call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
+!     'set view map scale 1; set xrange [0:pi]; set yrange [0:pi];'//&
+!     'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
 end subroutine write_data
 
 !==============================================================

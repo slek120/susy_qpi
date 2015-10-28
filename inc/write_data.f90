@@ -2,7 +2,11 @@ external sG0
 external dcuhre
 
 ! Double precision
-integer, parameter :: dp=kind(0.d0)
+! integer, parameter :: dp=kind(0.d0)
+
+! sqlite interface
+type(SQLITE_DATABASE)                      :: db
+type(SQLITE_COLUMN), dimension(:), pointer :: column
 
 ! Parameters
 !    omega = om + i * del
@@ -24,10 +28,8 @@ character(len=4) :: time
 !            Number of iterations to do
 !            steps*steps/2 total iterations
 real(dp)         :: qstep
-integer          :: steps, iqx, iqy, log=10, dat=20
+integer          :: steps, iqx, iqy, log=10
 real             :: start, end
-character(len=16):: somega
-character(len=64):: filename
 
 ! Variables for dcuhre
 !     ndim   integer.
