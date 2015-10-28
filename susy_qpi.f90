@@ -67,6 +67,8 @@ subroutine write_data(om, del)
 
 ! Start timer
   call cpu_time(start)
+  call date_and_time(date,time)
+  filename = date//time//".dat"
 
 ! frequency
   omega = dcmplx(om,del)
@@ -115,6 +117,8 @@ subroutine write_data(om, del)
     write(log,*) "Uc:    ", Uc
     write(log,*) "Uf:    ", Uf
     write(log,*) "omega: ", omega
+    write(log,*) "date:  ", date
+    write(log,*) "time:  ", time
   close(log)
 
 ! Settings for dcuhre
@@ -208,9 +212,11 @@ subroutine write_data(om, del)
   close(log)
 
 ! Export plot to png
-!   call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
-!     'set view map scale 1; set xrange [0:pi]; set yrange [0:pi]; set size square; '//&
-!     'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
+  call system('sqlite3 -column data.db "select distinct qx, qy, absresult from susy_qpi where date='&
+    //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > '//filename)
+  call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
+    'set view map scale 1; set xrange [-pi:pi]; set yrange [-pi:pi]; set size square; '//&
+    'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
 end subroutine write_data
 
 !==============================================================
