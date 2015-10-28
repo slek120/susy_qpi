@@ -209,7 +209,7 @@ subroutine write_data(om, del)
 
 ! Export plot to png
 !   call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
-!     'set view map scale 1; set xrange [0:pi]; set yrange [0:pi];'//&
+!     'set view map scale 1; set xrange [0:pi]; set yrange [0:pi]; set size square; '//&
 !     'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
 end subroutine write_data
 
