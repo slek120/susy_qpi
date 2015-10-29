@@ -100,6 +100,7 @@ subroutine write_data(om, del)
   call sqlite3_column_props( column(14), "date", SQLITE_CHAR, 8 )
   call sqlite3_column_props( column(15), "time", SQLITE_CHAR, 4 )
   call sqlite3_create_table( db, "susy_qpi", column)
+  call sqlite3_create_table( db, "runs", column)
 
   call sqlite3_set_column( column(1), t )
   call sqlite3_set_column( column(2), mu )
@@ -212,6 +213,9 @@ subroutine write_data(om, del)
     end do
   end do
 
+  call sqlite3_begin( db )
+  call sqlite3_insert( db, 'runs', column)
+  call sqlite3_commit( db )
   call sqlite3_close( db )
 
   open(log, file="susy_qpi.log", position="append", status="old")
