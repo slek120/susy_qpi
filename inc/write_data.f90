@@ -22,7 +22,7 @@ real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf, qx, qy
 complex(dp) :: omega, Gkinv(16), Gkqinv(16)
 character(len=8) :: date
 character(len=4) :: time
-character(len=16):: filename
+character(len=12):: filename
 character(len=64):: title
 
 ! Local variables
