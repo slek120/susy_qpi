@@ -37,5 +37,6 @@
 
 # Log files
 *.dat
+*.png
 *.log
-data.txt
+data.db
