@@ -225,7 +225,7 @@ subroutine write_data(om, del)
 
 ! Export plot to png
   call system('sqlite3 -column data.db "select distinct qx, qy, absresult from susy_qpi where date='&
-    //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > data/'//filename)
+    //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > '//filename)
   call system('gnuplot -e ''filename="'//filename//'"; name="'//trim(title)//'"'' plot.gp')
 end subroutine write_data
 

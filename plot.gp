@@ -14,12 +14,12 @@ set yrange [-pi:pi]
 set view map scale 1
 set size square
 
-splot filename
+splot "data/".filename
 
 set view 130, 10, 1, 1
 set pm3d scansbackward
 set output "3d/".filename.".png"
 
-splot filename
+splot "data/".filename
 
 #pause -1 "Hit return to continue"
