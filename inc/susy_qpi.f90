@@ -21,7 +21,7 @@ character(len=8) :: date
 character(len=4) :: time
 
 ! Local variables
-integer  :: i, j
+integer  :: i, j, k
 
 ! Interface for called procedures
 interface

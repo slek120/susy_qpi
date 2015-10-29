@@ -25,31 +25,32 @@ program susy_qpi
   Pi=4.0_dp*datan(1.0_dp)
 
   do i=0,4
-    do j=0,2
+    do j=0,4
+      do k=0,4
 
 ! Set experimental data
-      t   = 1_dp
-      mu  = 0.1_dp*t
-      x0  = 0.02_dp
-      epsf= 0.1_dp*x0
-      V   = 0_dp
-      Uc  = 0_dp
-      Uf  = 0_dp
-      V   = 0.2_dp
+        t   = 1_dp
+        mu  = 0.1_dp*t
+        x0  = 0.02_dp
+        epsf= 0.1_dp*x0
+        Uc  = 0.25_dp*i
+        Uf  = 0.25_dp*j
+        V   = 0.25_dp*k
 
 ! Set up matrix as an array of size 16
-      Gkinv = (/ complex(dp) :: &
-           0,  V, -Uc,  0, &
-           V,  0,   0, Uf, &
-         -Uc,  0,   0,  V, &
-           0, Uf,   V,  0 /)
-      Gkqinv = (/ complex(dp) :: &
-           0,  V, -Uc,  0, &
-           V,  0,   0, Uf, &
-         -Uc,  0,   0,  V, &
-           0, Uf,   V,  0 /)
+        Gkinv = (/ complex(dp) :: &
+             0,  V, -Uc,  0, &
+             V,  0,   0, Uf, &
+           -Uc,  0,   0,  V, &
+             0, Uf,   V,  0 /)
+        Gkqinv = (/ complex(dp) :: &
+             0,  V, -Uc,  0, &
+             V,  0,   0, Uf, &
+           -Uc,  0,   0,  V, &
+             0, Uf,   V,  0 /)
 
-      call write_data(i*0.5_dp,0.1_dp+j*0.4_dp)
+        call write_data(0.0_dp,0.3_dp)
+      end do
     end do
   end do
 
