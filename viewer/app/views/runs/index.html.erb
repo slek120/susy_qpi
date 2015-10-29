@@ -1,0 +1,45 @@
+<form action="" method="get">
+    <div class="pull-right">
+      <input type="radio" name="order" value="tasc">↑
+      <input type="radio" name="order" value="tdesc">↓
+      <input type="text" name="t" value="" placeholder="t">
+      
+      <input type="radio" name="order" value="muasc">↑
+      <input type="radio" name="order" value="mudesc">↓
+      <input type="text" name="mu" value="" placeholder="mu">
+      
+      <input type="radio" name="order" value="x0asc">↑
+      <input type="radio" name="order" value="x0desc">↓
+      <input type="text" name="x0" value="" placeholder="x0">
+      
+      <input type="radio" name="order" value="epsfasc">↑
+      <input type="radio" name="order" value="epsfdesc">↓
+      <input type="text" name="epsf" value="" placeholder="epsf">
+      
+      <input type="radio" name="order" value="Vasc">↑
+      <input type="radio" name="order" value="Vdesc">↓
+      <input type="text" name="V" value="" placeholder="V">
+      
+      <input type="radio" name="order" value="Ucasc">↑
+      <input type="radio" name="order" value="Ucdesc">↓
+      <input type="text" name="Uc" value="" placeholder="Uc">
+      
+      <input type="radio" name="order" value="Ufasc">↑
+      <input type="radio" name="order" value="Ufdesc">↓
+      <input type="text" name="Uf" value="" placeholder="Uf">
+      
+      <input type="radio" name="order" value="omegaasc">↑
+      <input type="radio" name="order" value="omegadesc">↓
+      <input type="text" name="omega" value="" placeholder="omega">
+      
+      <input type="radio" name="order" value="deltaasc">↑
+      <input type="radio" name="order" value="deltadesc">↓
+      <input type="text" name="delta" value="" placeholder="delta">
+
+      <button type="submit" class="btn btn-primary">OK</button>
+      <%= link_to "clear", runs_path %>
+    </div>
+  </form>
+<hr>
+<%= render @runs %>
+<%= paginate @runs %>

@@ -1,0 +1,13 @@
+t=<%= run.t %>
+mu=<%= run.mu %>
+x0=<%= run.x0 %>
+epsf=<%= run.epsf %>
+V=<%= run.V %>
+Uc=<%= run.Uc %>
+Uf=<%= run.Uf %>
+omega=<%= run.omega %>+<%= run.delta %>i
+date=<%= run.date %>
+time=<%= run.time %><br>
+<%= image_tag "2d/#{run.date}#{run.time}.dat.png" %>
+<%= image_tag "3d/#{run.date}#{run.time}.dat.png" %>
+<hr>
