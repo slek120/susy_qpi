@@ -24,8 +24,8 @@ program susy_qpi
 ! Set constants
   Pi=4.0_dp*datan(1.0_dp)
 
-  do i=0,4
-    do j=0,4
+  do i=1,4
+!     do j=1,4
 !       do k=0,4
 
 ! Set experimental data
@@ -33,8 +33,8 @@ program susy_qpi
         mu  = 0.1_dp*t
         x0  = 0.02_dp
         epsf= 0.1_dp*x0
-        Uc  = 0.25_dp*i
-        Uf  = 0.25_dp*i
+        Uc  = 0.1_dp*i
+        Uf  = 0.1_dp*i
         V   = 0.1_dp
 
 ! Set up matrix as an array of size 16
@@ -49,9 +49,9 @@ program susy_qpi
            -Uc,  0,   0,  V, &
              0, Uf,   V,  0 /)
 
-        call write_data(0.25_dp*j,0.1_dp)
+        call write_data(0.0_dp,0.4_dp)
 !       end do
-    end do
+!     end do
   end do
 
   open(10, file="susy_qpi.log", position="append", status="old")
@@ -225,7 +225,7 @@ subroutine write_data(om, del)
 
 ! Export plot to png
   call system('sqlite3 -column data.db "select distinct qx, qy, absresult from susy_qpi where date='&
-    //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > '//filename)
+    //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > data/'//filename)
   call system('gnuplot -e ''filename="'//filename//'"; name="'//trim(title)//'"'' plot.gp')
 end subroutine write_data
 
