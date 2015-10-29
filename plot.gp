@@ -1,6 +1,6 @@
 if (!exists("name")) name="QPI"
 set title name
-if (!exists("filename")) filename='test.dat'
+if (!exists("filename")) filename='test'
 set output "2d/".filename.".png"
 
 set terminal png
@@ -14,12 +14,12 @@ set yrange [-pi:pi]
 set view map scale 1
 set size square
 
-splot filename
+splot "data/".filename.".dat"
 
 set view 130, 10, 1, 1
 set pm3d scansbackward
 set output "3d/".filename.".png"
 
-splot filename
+splot "data/".filename.".dat"
 
 #pause -1 "Hit return to continue"
