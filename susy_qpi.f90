@@ -74,7 +74,7 @@ subroutine write_data(om, del)
 ! Start timer
   call cpu_time(start)
   call date_and_time(date,time)
-  filename = date//time
+  filename = date//time//".dat"
   write(title, '("w=", f0.2, "+", f0.2, "i", &
     &" V=", f0.2, " U_c=", f0.2, " U_f=", f0.2)') om, del, V, Uc, Uf
 
