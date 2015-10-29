@@ -74,6 +74,8 @@ subroutine write_data(om, del)
   call cpu_time(start)
   call date_and_time(date,time)
   filename = date//time//".dat"
+  write(title, '("w=", f0.2, "+", f0.2, "i", &
+    &" V=", f0.2, " U_c=", f0.2, " U_f=", f0.2)') om, del, V, Uc, Uf
 
 ! frequency
   omega = dcmplx(om,del)
@@ -219,9 +221,7 @@ subroutine write_data(om, del)
 ! Export plot to png
   call system('sqlite3 -column data.db "select distinct qx, qy, absresult from susy_qpi where date='&
     //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > '//filename)
-  call system('gnuplot -e ''set terminal png; set output "'//trim(filename)//'.png";'//&
-    'set view map scale 1; set xrange [-pi:pi]; set yrange [-pi:pi]; set size square; '//&
-    'unset surface ; set pm3d; splot "'//trim(filename)//'"''')
+  call system('gnuplot -e ''filename="'//filename//'"; name="'//trim(title)//'"'' plot.gp')
 end subroutine write_data
 
 !==============================================================

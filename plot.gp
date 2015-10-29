@@ -1,14 +1,25 @@
-set terminal png
-set output 'test.png'
-#set title "Test" 
-set xlabel "qx" 
-set ylabel "qy"
-set view map scale 1
-set xrange [-pi:pi]
-set yrange [-pi:pi]
-set size square
-unset surface 
-set pm3d
+if (!exists("name")) name="QPI"
+set title name
+if (!exists("filename")) filename='test.dat'
+set output "2d/".filename.".png"
 
-splot "< sqlite3 -column data.db 'select distinct qx,qy,absresult from susy_qpi order by qx, qy;' | awk -f add_blanks.awk"
+set terminal png
+unset surface
+unset key
+set pm3d
+set xlabel "{q}_{x}" 
+set xrange [-pi:pi]
+set ylabel "{q}_{y}"
+set yrange [-pi:pi]
+set view map scale 1
+set size square
+
+splot filename
+
+set view 130, 10, 1, 1
+set pm3d scansbackward
+set output "3d/".filename.".png"
+
+splot filename
+
 #pause -1 "Hit return to continue"
