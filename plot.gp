@@ -1,6 +1,6 @@
 if (!exists("name")) name="QPI"
 set title name
-if (!exists("filename")) filename='test.dat'
+if (!exists("filename")) filename="test.dat"
 set output "2d/".filename.".png"
 
 set terminal png
