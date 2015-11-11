@@ -24,35 +24,21 @@ program susy_qpi
 ! Set constants
   Pi=4.0_dp*datan(1.0_dp)
 
-  do i=1,4
+!   do i=1,4
 !     do j=1,4
 !       do k=0,4
 
 ! Set experimental data
-        t   = 1_dp
+        t1 = 1_dp
+        t2 = 1_dp
+        t3 = 1_dp
+        t4 = 1_dp
         mu  = 0.1_dp*t
-        x0  = 0.02_dp
-        epsf= 0.1_dp*x0
-        Uc  = 0.1_dp*i
-        Uf  = 0.1_dp*i
-        V   = 0.1_dp
 
-! Set up matrix as an array of size 16
-        Gkinv = (/ complex(dp) :: &
-             0,  V, -Uc,  0, &
-             V,  0,   0, Uf, &
-           -Uc,  0,   0,  V, &
-             0, Uf,   V,  0 /)
-        Gkqinv = (/ complex(dp) :: &
-             0,  V, -Uc,  0, &
-             V,  0,   0, Uf, &
-           -Uc,  0,   0,  V, &
-             0, Uf,   V,  0 /)
-
-        call write_data(0.0_dp,0.4_dp)
+        call write_data(0.0_dp,0.001_dp)
 !       end do
 !     end do
-  end do
+!   end do
 
   open(10, file="susy_qpi.log", position="append", status="old")
     write(10,*) "********************END: susy_qpi********************"
@@ -75,56 +61,49 @@ subroutine write_data(om, del)
   call cpu_time(start)
   call date_and_time(date,time)
   filename = date//time//".dat"
-  write(title, '("w=", f0.2, "+", f0.2, "i", &
-    &" V=", f0.2, " U_c=", f0.2, " U_f=", f0.2)') om, del, V, Uc, Uf
+  write(title, '("w=", f0.2, "+", f0.2, "i")') om, del
 
 ! frequency
   omega = dcmplx(om,del)
 
 ! Set column properties for sqlite
   call sqlite3_open( 'data.db', db )
-  allocate( column(15) )
-  call sqlite3_column_props( column(1), "t", SQLITE_REAL )
-  call sqlite3_column_props( column(2), "mu", SQLITE_REAL )
-  call sqlite3_column_props( column(3), "x0", SQLITE_REAL )
-  call sqlite3_column_props( column(4), "epsf", SQLITE_REAL )
-  call sqlite3_column_props( column(5), "V", SQLITE_REAL )
-  call sqlite3_column_props( column(6), "Uc", SQLITE_REAL )
-  call sqlite3_column_props( column(7), "Uf", SQLITE_REAL )
-  call sqlite3_column_props( column(8), "omega", SQLITE_REAL )
-  call sqlite3_column_props( column(9), "delta", SQLITE_REAL )
-  call sqlite3_column_props( column(10), "qx", SQLITE_REAL )
-  call sqlite3_column_props( column(11), "qy", SQLITE_REAL )
-  call sqlite3_column_props( column(12), "result", SQLITE_REAL )
-  call sqlite3_column_props( column(13), "absresult", SQLITE_REAL )
-  call sqlite3_column_props( column(14), "date", SQLITE_CHAR, 8 )
-  call sqlite3_column_props( column(15), "time", SQLITE_CHAR, 4 )
-  call sqlite3_create_table( db, "susy_qpi", column)
-  call sqlite3_create_table( db, "runs", column)
+  allocate( column(13) )
+  call sqlite3_column_props( column(1), "t1", SQLITE_REAL )
+  call sqlite3_column_props( column(2), "t2", SQLITE_REAL )
+  call sqlite3_column_props( column(3), "t3", SQLITE_REAL )
+  call sqlite3_column_props( column(4), "t4", SQLITE_REAL )
+  call sqlite3_column_props( column(5), "mu", SQLITE_REAL )
+  call sqlite3_column_props( column(6), "omega", SQLITE_REAL )
+  call sqlite3_column_props( column(7), "delta", SQLITE_REAL )
+  call sqlite3_column_props( column(8), "qx", SQLITE_REAL )
+  call sqlite3_column_props( column(9), "qy", SQLITE_REAL )
+  call sqlite3_column_props( column(10), "result", SQLITE_REAL )
+  call sqlite3_column_props( column(11), "absresult", SQLITE_REAL )
+  call sqlite3_column_props( column(12), "date", SQLITE_CHAR, 8 )
+  call sqlite3_column_props( column(13), "time", SQLITE_CHAR, 4 )
+  call sqlite3_create_table( db, "susy_qpi_single_band", column)
+  call sqlite3_create_table( db, "runs_single_band", column)
 
-  call sqlite3_set_column( column(1), t )
-  call sqlite3_set_column( column(2), mu )
-  call sqlite3_set_column( column(3), x0 )
-  call sqlite3_set_column( column(4), epsf )
-  call sqlite3_set_column( column(5), V )
-  call sqlite3_set_column( column(6), Uc )
-  call sqlite3_set_column( column(7), Uf )
-  call sqlite3_set_column( column(8), om )
-  call sqlite3_set_column( column(9), del )
-  call sqlite3_set_column( column(14), date )
-  call sqlite3_set_column( column(15), time )
+  call sqlite3_set_column( column(1), t1 )
+  call sqlite3_set_column( column(2), t2 )
+  call sqlite3_set_column( column(3), t3 )
+  call sqlite3_set_column( column(4), t4 )
+  call sqlite3_set_column( column(5), mu )
+  call sqlite3_set_column( column(6), om )
+  call sqlite3_set_column( column(7), del )
+  call sqlite3_set_column( column(12), date )
+  call sqlite3_set_column( column(13), time )
 
 ! Start log
   open(log, file="susy_qpi.log", position="append", status="old")
     write(log,*)
     write(log,*) "======================================"
-    write(log,*) "t:     ", t
+    write(log,*) "t1:    ", t1
+    write(log,*) "t2:    ", t2
+    write(log,*) "t3:    ", t3
+    write(log,*) "t4:    ", t4
     write(log,*) "mu:    ", mu
-    write(log,*) "x0:    ", x0
-    write(log,*) "epsf:  ", epsf
-    write(log,*) "V:     ", V
-    write(log,*) "Uc:    ", Uc
-    write(log,*) "Uf:    ", Uf
     write(log,*) "omega: ", omega
     write(log,*) "date:  ", date
     write(log,*) "time:  ", time
@@ -161,60 +140,60 @@ subroutine write_data(om, del)
 
       call sqlite3_begin( db )
 
-      call sqlite3_set_column( column(10), qx )
-      call sqlite3_set_column( column(11), qy )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), qx )
+      call sqlite3_set_column( column(9), qy )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), -qx )
-      call sqlite3_set_column( column(11), qy )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), -qx )
+      call sqlite3_set_column( column(9), qy )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), qx )
-      call sqlite3_set_column( column(11), -qy )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), qx )
+      call sqlite3_set_column( column(9), -qy )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), -qx )
-      call sqlite3_set_column( column(11), -qy )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), -qx )
+      call sqlite3_set_column( column(9), -qy )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), qy )
-      call sqlite3_set_column( column(11), qx )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), qy )
+      call sqlite3_set_column( column(9), qx )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), qy )
-      call sqlite3_set_column( column(11), -qx )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), qy )
+      call sqlite3_set_column( column(9), -qx )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), -qy )
-      call sqlite3_set_column( column(11), qx )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), -qy )
+      call sqlite3_set_column( column(9), qx )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
-      call sqlite3_set_column( column(10), -qy )
-      call sqlite3_set_column( column(11), -qx )
-      call sqlite3_set_column( column(12), result(1) )
-      call sqlite3_set_column( column(13), dabs(result(1)) )
-      call sqlite3_insert( db, 'susy_qpi', column )
+      call sqlite3_set_column( column(8), -qy )
+      call sqlite3_set_column( column(9), -qx )
+      call sqlite3_set_column( column(10), result(1) )
+      call sqlite3_set_column( column(11), dabs(result(1)) )
+      call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
       call sqlite3_commit( db )
     end do
   end do
 
   call sqlite3_begin( db )
-  call sqlite3_insert( db, 'runs', column)
+  call sqlite3_insert( db, 'runs_single_band', column)
   call sqlite3_commit( db )
   call sqlite3_close( db )
 
@@ -224,7 +203,7 @@ subroutine write_data(om, del)
   close(log)
 
 ! Export plot to png
-  call system('sqlite3 -column data.db "select distinct qx, qy, absresult from susy_qpi where date='&
+  call system('sqlite3 -column data.db "select distinct qx, qy, absresult from susy_qpi_single_band where date='&
     //date//' and time='//time//' order by qx, qy;" | awk -f add_blanks.awk > data/'//filename)
   call system('gnuplot -e ''filename="'//filename//'"; name="'//trim(title)//'"'' plot.gp')
 end subroutine write_data
@@ -247,39 +226,11 @@ subroutine sG0(ndim, z, nfun, f)
   kqy=ky+qy
 
   epsk    = -2.0_dp * t * (dcos(kx)     + dcos(ky))     - mu
-  epskpQ  = -2.0_dp * t * (dcos(kx+Pi)  + dcos(ky+Pi))  - mu
   epskq   = -2.0_dp * t * (dcos(kqx)    + dcos(kqy))    - mu
-  epskqpQ = -2.0_dp * t * (dcos(kqx+Pi) + dcos(kqy+Pi)) - mu
 
-  chik    = -2.0_dp * x0 * (dcos(kx)     + dcos(ky))     - epsf
-  chikpQ  = -2.0_dp * x0 * (dcos(kx+Pi)  + dcos(ky+Pi))  - epsf
-  chikq   = -2.0_dp * x0 * (dcos(kqx)    + dcos(kqy))    - epsf
-  chikqpQ = -2.0_dp * x0 * (dcos(kqx+Pi) + dcos(kqy+Pi)) - epsf
+  Gk  = 1_dp/(omega - epsk)
+  Gkq = 1_dp/(omega - epskq)
 
-  Gkinv(1)   = omega - epsk
-  Gkinv(6)   = omega - chik
-  Gkinv(11)  = omega - epskpQ
-  Gkinv(16)  = omega - chikpQ
-  Gkqinv(1)  = omega - epskq
-  Gkqinv(6)  = omega - chikq
-  Gkqinv(11) = omega - epskqpQ
-  Gkqinv(16) = omega - chikqpQ
-
-  call invert4x4(Gkinv, Gk, status)
-  if ( status>0 ) then
-    open(log, file="susy_qpi.log", position="append", status="old")
-    write(log,*) "ERROR: Singular matrix "
-    write(log,*) Gkinv
-    close(log)
-  end if
-  call invert4x4(Gkqinv, Gkq, status)
-  if ( status>0 ) then
-    open(log, file="susy_qpi.log", position="append", status="old")
-    write(log,*) "ERROR: Singular matrix "
-    write(log,*) Gkqinv
-    close(log)
-  end if
-
-  f(1)=dimag(Gk(1)*Gkq(1))
+  f(1)=dimag(Gk*Gkq)
 
 end subroutine sG0
