@@ -15,11 +15,11 @@ real(dp), intent(in) :: om, del
 ! Global variables
 !     omega  complex.
 !            Frequency (energy) used for G
-common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
+common /gvars/ Pi, t1, t2, t3, t4, mu
 common /freq/  omega, qx, qy
 common /date/  date, time
-real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf, qx, qy
-complex(dp) :: omega, Gkinv(16), Gkqinv(16)
+real(dp)    :: Pi, t1, t2, t3, t4, mu, qx, qy
+complex(dp) :: omega
 character(len=8) :: date
 character(len=4) :: time
 character(len=16):: filename

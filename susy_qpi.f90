@@ -27,13 +27,12 @@ program susy_qpi
 !   do i=1,4
 !     do j=1,4
 !       do k=0,4
-
 ! Set experimental data
-        t1 = 1_dp
-        t2 = 1_dp
-        t3 = 1_dp
-        t4 = 1_dp
-        mu  = 0.1_dp*t
+        t1 = -1_dp
+        t2 = -0.35_dp
+        t3 = -0.035_dp
+        t4 =  0.15_dp
+        mu = -0.8_dp
 
         call write_data(0.0_dp,0.001_dp)
 !       end do
@@ -225,8 +224,16 @@ subroutine sG0(ndim, z, nfun, f)
   kqx=kx+qx
   kqy=ky+qy
 
-  epsk    = -2.0_dp * t * (dcos(kx)     + dcos(ky))     - mu
-  epskq   = -2.0_dp * t * (dcos(kqx)    + dcos(kqy))    - mu
+  epsk = -2_dp * t1 * (dcos(kx) + dcos(ky))  &
+         -4._dp * t2 * dcos(kx) * dcos(ky)  &
+         -2_dp * t3 * (dcos(3*kx) + dcos(3*ky))  &
+         -4._dp * t4 * (dcos(3*kx) * dcos(ky) + dcos(kx) * dcos(3*ky))  &
+         -mu
+  epskq= -2_dp * t1 * (dcos(kqx) + dcos(kqy))  &
+         -4._dp * t2 * dcos(kqx) * dcos(kqy)  &
+         -2_dp * t3 * (dcos(3*kqx) + dcos(3*kqy))  &
+         -4._dp * t4 * (dcos(3*kqx) * dcos(kqy) + dcos(kqx) * dcos(3*kqy))  &
+         -mu
 
   Gk  = 1_dp/(omega - epsk)
   Gkq = 1_dp/(omega - epskq)

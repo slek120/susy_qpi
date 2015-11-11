@@ -7,17 +7,16 @@ real(dp), intent(in)  :: z(ndim)
 real(dp), intent(out) :: f(nfun)
 
 ! Globar variables
-common /gvars/ Pi, t, mu, x0, epsf, V, Uc, Uf, Gkinv, Gkqinv
+common /gvars/ Pi, t1, t2, t3, t4, mu
 common /freq/  omega, qx, qy
-real(dp)    :: Pi, t, mu, x0, epsf, V, Uc, Uf, qx, qy
-complex(dp) :: omega, Gkinv(16), Gkqinv(16)
+real(dp)    :: Pi, t1, t2, t3, t4, mu, qx, qy
+complex(dp) :: omega
 
 ! Local variables
 integer     :: status, log=10
 real(dp)    :: kx, ky, kqx, kqy, &
-               epsk, epskpQ, epskq, epskqpQ, &
-               chik, chikq, chikpQ, chikqpQ
-complex(dp) :: Gk(16), Gkq(16)
+               epsk, epskq
+complex(dp) :: Gk, Gkq
 
 ! Interface for called procedures
 interface
