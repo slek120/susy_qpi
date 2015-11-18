@@ -28,13 +28,15 @@ program susy_qpi
 !     do j=1,4
 !       do k=0,4
 ! Set experimental data
-        t1 = -1_dp
-        t2 = -0.35_dp
-        t3 = -0.035_dp
-        t4 =  0.15_dp
-        mu = -0.8_dp
+        t1 = -10._dp
+        t2 = -3.5_dp
+        t3 = -0.35_dp
+        t4 =  1.5_dp
+        mu = -8._dp
 
-        call write_data(0.0_dp,0.001_dp)
+        call write_data(-25._dp,0.001_dp)
+!         call write_data(-10_dp,0.001_dp)
+!         call write_data(-8_dp,0.001_dp)
 !       end do
 !     end do
 !   end do
