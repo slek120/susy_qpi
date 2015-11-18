@@ -119,7 +119,7 @@ subroutine write_data(om, del)
 
       call cpu_time(end)
       print *, 0.000194175*(0.5*(iqx*(iqx+1))+iqy), end-start
-      flush()
+      call flush()
     end do
   end do
 
