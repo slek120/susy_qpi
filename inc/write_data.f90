@@ -4,10 +4,6 @@ external dcuhre
 ! Double precision
 ! integer, parameter :: dp=kind(0.d0)
 
-! sqlite interface
-type(SQLITE_DATABASE)                      :: db
-type(SQLITE_COLUMN), dimension(:), pointer :: column
-
 ! Parameters
 !    omega = om + i * del
 real(dp), intent(in) :: om, del
@@ -22,7 +18,7 @@ real(dp)    :: Pi, t1, t2, t3, t4, mu, qx, qy
 complex(dp) :: omega
 character(len=8) :: date
 character(len=4) :: time
-character(len=16):: filename
+character(len=21):: filename
 character(len=64):: title
 
 ! Local variables
@@ -30,7 +26,7 @@ character(len=64):: title
 !            Number of iterations to do
 !            steps*steps/2 total iterations
 real(dp)         :: qstep
-integer          :: steps, iqx, iqy, log=10
+integer          :: steps, iqx, iqy, log=10, dat=20
 real             :: start, end
 
 ! Variables for dcuhre
