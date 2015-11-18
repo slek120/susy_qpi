@@ -35,8 +35,8 @@ program susy_qpi
         mu = -8._dp
 
 !         call write_data(-25._dp,0.001_dp)
-        call write_data(-10._dp,0.001_dp)
-!         call write_data(-8._dp,0.001_dp)
+!         call write_data(-10._dp,0.001_dp)
+        call write_data(-8._dp,0.01_dp)
 !       end do
 !     end do
 !   end do
@@ -119,6 +119,7 @@ subroutine write_data(om, del)
 
       call cpu_time(end)
       print *, 0.000194175*(0.5*(iqx*(iqx+1))+iqy), end-start
+      flush()
     end do
   end do
 
