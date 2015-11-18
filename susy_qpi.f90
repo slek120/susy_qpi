@@ -188,6 +188,9 @@ subroutine write_data(om, del)
       call sqlite3_insert( db, 'susy_qpi_single_band', column )
 
       call sqlite3_commit( db )
+
+      call cpu_time(end)
+      print *, 0.000194175*(0.5*(iqx*(iqx+1))+iqy), end-start
     end do
   end do
 
