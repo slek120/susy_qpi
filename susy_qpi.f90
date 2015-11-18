@@ -34,8 +34,8 @@ program susy_qpi
         t4 =  1.5_dp
         mu = -8._dp
 
-        call write_data(-25._dp,0.001_dp)
-!         call write_data(-10_dp,0.001_dp)
+!         call write_data(-25._dp,0.001_dp)
+        call write_data(-10_dp,0.001_dp)
 !         call write_data(-8_dp,0.001_dp)
 !       end do
 !     end do
