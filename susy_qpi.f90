@@ -34,23 +34,12 @@ program susy_qpi
         t4 = -0.15_dp *t1
         mu =  0.8_dp  *t1
 
-        call write_data(-20._dp, 0.01_dp)
-        call write_data(-15._dp, 0.01_dp)
         call write_data(-10._dp, 0.01_dp)
         call write_data( -8._dp, 0.01_dp)
         call write_data( -6._dp, 0.01_dp)
-        call write_data( -4._dp, 0.01_dp)
-        call write_data( -2._dp, 0.01_dp)
         call write_data(  0._dp, 0.01_dp)
-        call write_data(  2._dp, 0.01_dp)
-        call write_data(  4._dp, 0.01_dp)
         call write_data(  6._dp, 0.01_dp)
-        call write_data(  8._dp, 0.01_dp)
-        call write_data( 10._dp, 0.01_dp)
-        call write_data( 12._dp, 0.01_dp)
         call write_data( 14._dp, 0.01_dp)
-        call write_data( 16._dp, 0.01_dp)
-        call write_data( 19._dp, 0.01_dp)
 !       end do
 !     end do
 !   end do
@@ -116,7 +105,6 @@ subroutine write_data(om, del)
   do iqx=0,steps
     qx=iqx*qstep
     do iqy = 0,iqx
-      i=i+1
       qy=iqy*qstep
 !     Integrate sG0 subroutine
       call dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
@@ -134,6 +122,7 @@ subroutine write_data(om, del)
       close(dat)
 
 !     Calculate percentage complete and estimated time remaining
+      i=i+1
       call system_clock(end)
       est = real(end-start)/real(rate)*(5150.0/i-1.0)
       write(*,"(I3,'% ',I4,':',I2,' remaining')") int(i/51.5), est/60, mod(est,60)
