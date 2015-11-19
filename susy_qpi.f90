@@ -113,7 +113,7 @@ subroutine write_data(om, del)
 !     Log results
       if (ifail>0) then
         open(log, file="susy_qpi.log", position="append", status="old")
-        write(log,*) "ERROR: DCUHRE exit code ", ifail
+        write(log,*) "ERROR: DCUHRE exit code ", ifail, qx, qy
         close(log)
       end if
 
