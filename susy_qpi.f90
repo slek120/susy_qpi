@@ -133,16 +133,11 @@ subroutine write_data(om, del)
         write(dat,*) qx, qy, result(1), dabs(result(1))
       close(dat)
 
-<<<<<<< HEAD
-      call cpu_time(end)
-      print *, 0.000194175*(0.5*(iqx*(iqx+1))+iqy), end-start
-=======
 !     Calculate percentage complete and estimated time remaining
       call system_clock(end)
       est = real(end-start)/real(rate)*(5150.0/i-1.0)
       write(*,"(I3,'% ',I4,':',I2,' remaining')") int(i/51.5), est/60, mod(est,60)
 !     Flush the stdout (for nohup)
->>>>>>> single_band
       call flush()
     end do
   end do
