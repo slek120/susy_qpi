@@ -76,7 +76,7 @@ subroutine write_data(om, del)
   include "inc/write_data.f90"
 
 ! Start timer
-  call cpu_time(start)
+  call system_clock(start,rate)
   call date_and_time(date,time)
   filename = date//time//".dat"
   write(title, '("w=", f0.2, "+", f0.2, "i")') om, del
@@ -140,10 +140,12 @@ subroutine write_data(om, del)
 ! Step through 1/8 triangle of BZ
   steps=100
   qstep=Pi/(steps*1.0_dp)
+  i=0
 
   do iqx=0,steps
     qx=iqx*qstep
     do iqy = 0,iqx
+      i=i+1
       qy=iqy*qstep
 !     Integrate sG0 subroutine
       call dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
@@ -208,9 +210,11 @@ subroutine write_data(om, del)
 
       call sqlite3_commit( db )
 
-!     Calculate percentage complete and time elapsed and flush stdout
-      call cpu_time(end)
-      print *, 0.000194175*(0.5*(iqx*(iqx+1))+iqy), end-start
+!     Calculate percentage complete and estimated time remaining
+      call system_clock(end)
+      est = real(end-start)/real(rate)*(5150.0/i-1.0)
+      write(*,"(I3,'% ',I4,':',I2,' remaining')") int(i/51.5), est/60, mod(est,60)
+!     Flush the stdout (for nohup)
       call flush()
     end do
   end do
@@ -221,8 +225,8 @@ subroutine write_data(om, del)
   call sqlite3_close( db )
 
   open(log, file="susy_qpi.log", position="append", status="old")
-    call cpu_time(end)
-    write(log,*) "CALCULATION TIME: ", end-start
+    call system_clock(end)
+    write(log,*) "CALCULATION TIME: ", real(end-start)/real(rate)
   close(log)
 
 ! Export plot to png
