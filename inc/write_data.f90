@@ -26,8 +26,8 @@ character(len=64):: title
 !            Number of iterations to do
 !            steps*steps/2 total iterations
 real(dp)         :: qstep
-integer          :: steps, iqx, iqy, log=10, dat=20
-real             :: start, end
+integer          :: steps, i, iqx, iqy, log=10, dat=20
+real             :: start, end, rate, est
 
 ! Variables for dcuhre
 !     ndim   integer.

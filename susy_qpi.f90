@@ -28,15 +28,29 @@ program susy_qpi
 !     do j=1,4
 !       do k=0,4
 ! Set experimental data
-        t1 = -10._dp
-        t2 = -3.5_dp
-        t3 = -0.35_dp
-        t4 =  1.5_dp
-        mu = -8._dp
+        t1 = -15._dp
+        t2 =  0.35_dp *t1
+        t3 =  0.035_dp*t1
+        t4 = -0.15_dp *t1
+        mu =  0.8_dp  *t1
 
-!         call write_data(-25._dp,0.001_dp)
-!         call write_data(-10._dp,0.001_dp)
-        call write_data(-8._dp,0.01_dp)
+        call write_data(-20._dp, 0.01_dp)
+        call write_data(-15._dp, 0.01_dp)
+        call write_data(-10._dp, 0.01_dp)
+        call write_data( -8._dp, 0.01_dp)
+        call write_data( -6._dp, 0.01_dp)
+        call write_data( -4._dp, 0.01_dp)
+        call write_data( -2._dp, 0.01_dp)
+        call write_data(  0._dp, 0.01_dp)
+        call write_data(  2._dp, 0.01_dp)
+        call write_data(  4._dp, 0.01_dp)
+        call write_data(  6._dp, 0.01_dp)
+        call write_data(  8._dp, 0.01_dp)
+        call write_data( 10._dp, 0.01_dp)
+        call write_data( 12._dp, 0.01_dp)
+        call write_data( 14._dp, 0.01_dp)
+        call write_data( 16._dp, 0.01_dp)
+        call write_data( 19._dp, 0.01_dp)
 !       end do
 !     end do
 !   end do
@@ -59,7 +73,7 @@ subroutine write_data(om, del)
   include "inc/write_data.f90"
 
 ! Start timer
-  call cpu_time(start)
+  call system_clock(start,rate)
   call date_and_time(date,time)
   
 ! frequency
@@ -97,10 +111,12 @@ subroutine write_data(om, del)
 ! Step through 1/8 triangle of BZ
   steps=100
   qstep=Pi/(steps*1.0_dp)
+  i=0
 
   do iqx=0,steps
     qx=iqx*qstep
     do iqy = 0,iqx
+      i=i+1
       qy=iqy*qstep
 !     Integrate sG0 subroutine
       call dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
@@ -117,15 +133,23 @@ subroutine write_data(om, del)
         write(dat,*) qx, qy, result(1), dabs(result(1))
       close(dat)
 
+<<<<<<< HEAD
       call cpu_time(end)
       print *, 0.000194175*(0.5*(iqx*(iqx+1))+iqy), end-start
+=======
+!     Calculate percentage complete and estimated time remaining
+      call system_clock(end)
+      est = real(end-start)/real(rate)*(5150.0/i-1.0)
+      write(*,"(I3,'% ',I4,':',I2,' remaining')") int(i/51.5), est/60, mod(est,60)
+!     Flush the stdout (for nohup)
+>>>>>>> single_band
       call flush()
     end do
   end do
 
   open(log, file="susy_qpi.log", position="append", status="old")
-    call cpu_time(end)
-    write(log,*) "CALCULATION TIME: ", end-start
+    call system_clock(end)
+    write(log,*) "CALCULATION TIME: ", real(end-start)/real(rate)
   close(log)
 
 end subroutine write_data
