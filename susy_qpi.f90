@@ -34,12 +34,11 @@ program susy_qpi
         t4 = -0.15_dp *t1
         mu =  0.8_dp  *t1
 
-        call write_data(-10._dp, 0.01_dp)
-        call write_data( -8._dp, 0.01_dp)
-        call write_data( -6._dp, 0.01_dp)
-        call write_data(  0._dp, 0.01_dp)
-        call write_data(  6._dp, 0.01_dp)
-        call write_data( 14._dp, 0.01_dp)
+        call write_data( -8._dp, 0.1_dp)
+        call write_data( -6._dp, 0.1_dp)
+        call write_data(  0._dp, 0.1_dp)
+        call write_data(  6._dp, 0.1_dp)
+        call write_data( 14._dp, 0.1_dp)
 !       end do
 !     end do
 !   end do
