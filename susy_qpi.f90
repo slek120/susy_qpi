@@ -210,12 +210,8 @@ subroutine write_data(om, del)
 
       call sqlite3_commit( db )
 
-!     Calculate percentage complete and estimated time remaining
-      call system_clock(end)
-      est = real(end-start)/real(rate)*(5150.0/i-1.0)
-      write(*,"(I3,'% ',I4,':',I2,' remaining')") int(i/51.5), est/60, mod(est,60)
-!     Flush the stdout (for nohup)
-      call flush()
+!     Display progress bar
+      call progress(i/5150.0, start)
     end do
   end do
 
@@ -269,3 +265,20 @@ subroutine sG0(ndim, z, nfun, f)
   f(1)=dimag(Gk*Gkq)
 
 end subroutine sG0
+
+subroutine progress(percent, start)
+  implicit none
+  integer, intent(in) :: start
+  real, intent(in)    :: percent
+  integer             :: end, rate, elapsed, remaining
+  character(len=102)  :: bar
+
+  call system_clock(end, rate)
+  elapsed   = real(end-start)/real(rate)
+  remaining = elapsed*(1.0/percent-1.0)
+  bar  = "["//repeat("=",int(percent*100))//repeat(" ",int((1.0-percent)*100))//"]"
+  
+  write(*,"(A,I3,'% ',I4,':',I2.2,' elapsed',I4,':',I2.2,' remaining')") &
+    bar, int(percent*100), elapsed/60, mod(elapsed,60), remaining/60, mod(remaining,60)
+  call flush()
+end subroutine progress

@@ -31,7 +31,7 @@ character(len=64):: title
 !            steps*steps/2 total iterations
 real(dp)         :: qstep
 integer          :: steps, iqx, iqy, i, log=10
-integer          :: start, end, rate, est
+integer          :: start, end, rate
 
 ! Variables for dcuhre
 !     ndim   integer.
@@ -84,6 +84,15 @@ integer            :: minpts, maxpts, neval, ifail
 integer, parameter :: ndim = 2, nfun = 1, nwork = 6000000
 real(dp)           :: a(ndim), b(ndim), abserr, relerr, &
                       result(nfun), absest(nfun), work(nwork)
+
+! Interface for progress bar
+interface
+  subroutine progress(percent, start)
+    implicit none
+    integer, intent(in) :: start
+    real, intent(in)    :: percent
+  end subroutine progress
+end interface
 
 ! Interface for called procedures
 ! TODO: fix segmentation fault caused by non-declared array sizes
