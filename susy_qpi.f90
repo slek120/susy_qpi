@@ -20,20 +20,9 @@ program susy_qpi
     write(10,*) "DATE: "//date//" TIME: "//time
   close(10)
 
-
-! Set constants
-  Pi=4.0_dp*datan(1.0_dp)
-
 !   do i=1,4
 !     do j=1,4
 !       do k=0,4
-! Set experimental data
-        t1 = -15._dp
-        t2 =  0.35_dp *t1
-        t3 =  0.035_dp*t1
-        t4 = -0.15_dp *t1
-        mu =  0.8_dp  *t1
-
         call write_data( -8._dp, 0.1_dp)
         call write_data( -6._dp, 0.1_dp)
         call write_data(  0._dp, 0.1_dp)
@@ -56,7 +45,6 @@ end program susy_qpi
 !==============================================================
 
 subroutine write_data(om, del)
-  use sqlite
   implicit none
   include "inc/write_data.f90"
 
@@ -67,6 +55,9 @@ subroutine write_data(om, del)
 ! frequency
   omega = dcmplx(om,del)
 
+! Set constants
+  Pi=4.0_dp*datan(1.0_dp)
+
 ! Start log
   filename = "data/"//date//time//".dat"
   open(dat, file=filename, position="append", status="unknown")
@@ -75,21 +66,16 @@ subroutine write_data(om, del)
 
   open(log, file="susy_qpi.log", position="append", status="old")
     write(log,*)
-    write(log,*) "======================================"
-    write(log,*) "t1:    ", t1
-    write(log,*) "t2:    ", t2
-    write(log,*) "t3:    ", t3
-    write(log,*) "t4:    ", t4
-    write(log,*) "mu:    ", mu
+    write(log,*) "================="
     write(log,*) "omega: ", omega
     write(log,*) "date:  ", date
     write(log,*) "time:  ", time
   close(log)
 
 ! Settings for dcuhre
-  a(1) = -1.0_dp*Pi
+  a(1) = -Pi
   b(1) = Pi
-  a(2) = -1.0_dp*Pi
+  a(2) = -Pi
   b(2) = Pi
   minpts = 2000
   maxpts = 60000000
@@ -102,9 +88,10 @@ subroutine write_data(om, del)
   i=0
 
   do iqx=0,steps
-    qx=iqx*qstep
     do iqy = 0,iqx
+      qx=iqx*qstep
       qy=iqy*qstep
+
 !     Integrate sG0 subroutine
       call dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
                   abserr, relerr, 0, nwork, 0, result,&
@@ -148,6 +135,13 @@ end subroutine write_data
 subroutine sG0(ndim, z, nfun, f)
   implicit none
   include "inc/sG0.f90"
+
+! Set experimental data
+  t1 = -15._dp
+  t2 =  0.35_dp *t1
+  t3 =  0.035_dp*t1
+  t4 = -0.15_dp *t1
+  mu =  0.8_dp  *t1
 
   kx = z(1)
   ky = z(2)

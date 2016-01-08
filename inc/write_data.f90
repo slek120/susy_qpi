@@ -2,7 +2,7 @@ external sG0
 external dcuhre
 
 ! Double precision
-! integer, parameter :: dp=kind(0.d0)
+integer, parameter :: dp=kind(0.d0)
 
 ! Parameters
 !    omega = om + i * del
@@ -11,15 +11,13 @@ real(dp), intent(in) :: om, del
 ! Global variables
 !     omega  complex.
 !            Frequency (energy) used for G
-common /gvars/ Pi, t1, t2, t3, t4, mu
 common /freq/  omega, qx, qy
 common /date/  date, time
-real(dp)    :: Pi, t1, t2, t3, t4, mu, qx, qy
+real(dp)    :: Pi, qx, qy
 complex(dp) :: omega
 character(len=8) :: date
 character(len=4) :: time
 character(len=21):: filename
-character(len=64):: title
 
 ! Local variables
 !     steps  integer.

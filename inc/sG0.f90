@@ -7,9 +7,8 @@ real(dp), intent(in)  :: z(ndim)
 real(dp), intent(out) :: f(nfun)
 
 ! Globar variables
-common /gvars/ Pi, t1, t2, t3, t4, mu
 common /freq/  omega, qx, qy
-real(dp)    :: Pi, t1, t2, t3, t4, mu, qx, qy
+real(dp)    :: qx, qy, t1,t2,t3,t4,mu
 complex(dp) :: omega
 
 ! Local variables
