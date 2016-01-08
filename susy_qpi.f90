@@ -145,6 +145,14 @@ subroutine QPI(ndim, z, nfun, f)
 
 end subroutine QPI
 
+
+!==============================================================
+! Gmatrix     Returns Greens function matrix
+!   kx        x component of k vector
+!   ky        x component of k vector
+!   Gk        Resultant matrix
+!==============================================================
+
 subroutine Gmatrix(kx,ky,Gk)
   implicit none
   include "inc/Gmatrix.f90"

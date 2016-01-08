@@ -25,7 +25,7 @@ character(len=21):: filename
 !            steps*steps/2 total iterations
 real(dp)         :: qstep
 integer          :: steps, i, iqx, iqy, log=10, dat=20
-integer          :: start, end, rate, est
+integer          :: start, end, rate
 
 ! Variables for dcuhre
 !     ndim   integer.

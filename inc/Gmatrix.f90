@@ -6,8 +6,9 @@ real(dp), intent(in)     :: kx, ky
 complex(dp), intent(out) :: Gk(16)
 
 ! Globar variables
-common /gvars/ omega, qx, qy
-real(dp) :: omega, qx, qy
+common /freq/ omega, qx, qy
+real(dp)    :: qx, qy
+complex(dp) :: omega
 
 ! Local variables
 integer     :: status, log=10
