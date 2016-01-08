@@ -23,11 +23,10 @@ program susy_qpi
 !   do i=1,4
 !     do j=1,4
 !       do k=0,4
-        call write_data( -8._dp, 0.1_dp)
-        call write_data( -6._dp, 0.1_dp)
+        call write_data( -15._dp, 0.1_dp)
+        call write_data( -10._dp, 0.1_dp)
+        call write_data( -5._dp, 0.1_dp)
         call write_data(  0._dp, 0.1_dp)
-        call write_data(  6._dp, 0.1_dp)
-        call write_data( 14._dp, 0.1_dp)
 !       end do
 !     end do
 !   end do
@@ -55,7 +54,6 @@ subroutine write_data(om, del)
   
 ! frequency
   omega = dcmplx(om,del)
-
 ! Set constants
   Pi=4.0_dp*datan(1.0_dp)
 
@@ -105,7 +103,7 @@ subroutine write_data(om, del)
       end if
 
       open(dat, file=filename, position="append", status="old")
-        write(dat,*) qx, qy, result(1), dabs(result(1))
+        write(dat,*) qx, qy, result(1), result(2)
       close(dat)
 
       i=i+1
@@ -140,8 +138,8 @@ subroutine QPI(ndim, z, nfun, f)
 
   call Gmatrix(kx, ky, Gk)
   call Gmatrix(kqx,kqy,Gkq)
-
   f(1)=dimag(Gk(1)*Gkq(1))
+  f(2)=dimag(Gk(6)*Gkq(6))
 
 end subroutine QPI
 
