@@ -1,4 +1,4 @@
-external sG0
+external QPI
 external dcuhre
 
 ! Double precision
@@ -82,7 +82,7 @@ real(dp)           :: a(ndim), b(ndim), abserr, relerr, &
 ! Interface for called procedures
 ! TODO: fix segmentation fault caused by non-declared array sizes
 !   interface
-!     subroutine dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
+!     subroutine dcuhre(ndim, nfun, a, b, minpts, maxpts, QPI, &
 !                     abserr, relerr, key, nwork, restar, result,&
 !                     absest, neval, ifail, work)
 !       implicit none
@@ -94,13 +94,13 @@ real(dp)           :: a(ndim), b(ndim), abserr, relerr, &
 !       real (dp), intent(in out)  :: work(:)
 
 !       interface
-!         subroutine sG0(ndim, z, nfun, f)
+!         subroutine QPI(ndim, z, nfun, f)
 !           implicit none
 !           integer, parameter     :: dp=kind(0.d0)
 !           integer, intent(in)    :: ndim, nfun
 !           real (dp), intent(in)  :: z(:)
 !           real (dp), intent(out) :: f(:)
-!         end subroutine sG0
+!         end subroutine QPI
 !       end interface
 !     end subroutine dcuhre
 !   end interface

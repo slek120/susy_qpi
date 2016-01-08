@@ -4,7 +4,7 @@ CFLAGS =
 
 susy_qpi : susy_qpi.f90 \
 	dcuhre.o invert4x4.o \
-	inc/susy_qpi.f90 inc/write_data.f90 inc/sG0.f90
+	inc/susy_qpi.f90 inc/write_data.f90 inc/QPI.f90 inc/Gmatrix.f90
 	$(FC) $(FFLAGS) -o susy_qpi.out susy_qpi.f90 dcuhre.o invert4x4.o
 
 dcuhre.o : src/dcuhre.f

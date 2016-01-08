@@ -92,8 +92,8 @@ subroutine write_data(om, del)
       qx=iqx*qstep
       qy=iqy*qstep
 
-!     Integrate sG0 subroutine
-      call dcuhre(ndim, nfun, a, b, minpts, maxpts, sG0, &
+!     Integrate QPI subroutine
+      call dcuhre(ndim, nfun, a, b, minpts, maxpts, QPI, &
                   abserr, relerr, 0, nwork, 0, result,&
                   absest, neval, ifail, work)
 !     Log results
@@ -125,43 +125,70 @@ subroutine write_data(om, del)
 end subroutine write_data
 
 !==============================================================
-! sG0         Integrand for dcuhre
+! QPI         Integrand for dcuhre
 !   ndim      number of variables
 !   z         variables for integration
 !   nfun      number of components of integral
 !   f         value of integrand
 !==============================================================
 
-subroutine sG0(ndim, z, nfun, f)
+subroutine QPI(ndim, z, nfun, f)
   implicit none
-  include "inc/sG0.f90"
-
-! Set experimental data
-  t1 = -15._dp
-  t2 =  0.35_dp *t1
-  t3 =  0.035_dp*t1
-  t4 = -0.15_dp *t1
-  mu =  0.8_dp  *t1
+  include "inc/QPI.f90"
 
   kx = z(1)
   ky = z(2)
   kqx=kx+qx
   kqy=ky+qy
 
-  epsk = -2_dp * t1 * (dcos(kx) + dcos(ky))  &
-         -4._dp * t2 * dcos(kx) * dcos(ky)  &
-         -2_dp * t3 * (dcos(3*kx) + dcos(3*ky))  &
-         -4._dp * t4 * (dcos(3*kx) * dcos(ky) + dcos(kx) * dcos(3*ky))  &
-         -mu
-  epskq= -2_dp * t1 * (dcos(kqx) + dcos(kqy))  &
-         -4._dp * t2 * dcos(kqx) * dcos(kqy)  &
-         -2_dp * t3 * (dcos(3*kqx) + dcos(3*kqy))  &
-         -4._dp * t4 * (dcos(3*kqx) * dcos(kqy) + dcos(kqx) * dcos(3*kqy))  &
-         -mu
+  call Gmatrix(kx, ky, Gk)
+  call Gmatrix(kqx,kqy,Gkq)
 
-  Gk  = 1_dp/(omega - epsk)
-  Gkq = 1_dp/(omega - epskq)
+  f(1)=dimag(Gk(1)*Gkq(1))
 
-  f(1)=dimag(Gk*Gkq)
+end subroutine QPI
 
-end subroutine sG0
+subroutine Gmatrix(kx,ky,Gk)
+  implicit none
+  include "inc/Gmatrix.f90"
+
+! Set constants
+  Pi=4.0_dp*datan(1.0_dp)
+  kQx = kx+Pi
+  kQy = ky+Pi
+
+! Energy dispersion of c band
+  epsk  = t10*( -2._dp * (dcos(kx) + dcos(ky)) - mu)
+  epskQ = t10*( -2._dp * (dcos(kQx) + dcos(kQy)) - mu)
+
+! Energy dispersion of f band
+  chik  = x10*( -2._dp * (dcos(kx) + dcos(ky))  &
+          -4._dp * x11 * dcos(kx) * dcos(ky)  &
+          -2._dp * x30 * (dcos(3*kx) + dcos(3*ky))  &
+          -2._dp * x31 * (dcos(3*kx) * dcos(ky) + dcos(kx) * dcos(3*ky))  &
+          -epsf)
+  chikQ = x10*( -2._dp * (dcos(kQx) + dcos(kQy))  &
+          -4._dp * x11 * dcos(kQx) * dcos(kQy)  &
+          -2._dp * x30 * (dcos(3*kQx) + dcos(3*kQy))  &
+          -2._dp * x31 * (dcos(3*kQx) * dcos(kQy) + dcos(kQx) * dcos(3*kQy))  &
+          -epsf)
+
+  a = omega - epsk
+  b = omega - chik
+  c = omega - epskQ
+  d = omega - chikQ
+
+  Gkinv = (/ complex(dp) :: &
+             a,  s, -Uc,  0, &
+             s,  b,   0, Uf, &
+           -Uc,  0,   c,  s, &
+             0, Uf,   s,  d /)
+
+  call invert4x4(Gkinv, Gk, status)
+  if ( status>0 ) then
+    open(log, file="susy_qpi.log", position="append", status="old")
+    write(log,*) "ERROR: Singular matrix "
+    write(log,*) Gkinv
+    close(log)
+  end if
+end subroutine Gmatrix
