@@ -17,7 +17,7 @@ real(dp)    :: Pi, kQx, kQy
 real(dp)    :: epsk, chik, epskQ, chikQ
 real(dp), parameter :: t10 = -185._dp
 real(dp), parameter :: mu  = 3.8_dp
-real(dp), parameter :: x10 = -1_dp
+real(dp), parameter :: x10 = -5._dp
 real(dp), parameter :: x11 =  0.35_dp
 real(dp), parameter :: x30 =  0.035_dp
 real(dp), parameter :: x31 = -0.3_dp
