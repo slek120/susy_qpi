@@ -23,8 +23,8 @@ real(dp), parameter :: x30 =  0.035_dp
 real(dp), parameter :: x31 = -0.3_dp
 real(dp), parameter :: epsf= 0.8_dp
 real(dp), parameter :: s   = 9._dp
-real(dp), parameter :: Uc  = 0._dp
-real(dp), parameter :: Uf  = 0._dp
+real(dp), parameter :: Uc  = 2._dp
+real(dp), parameter :: Uf  = 2._dp
 
 ! Interface for called procedures
 interface
