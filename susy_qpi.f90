@@ -229,7 +229,7 @@ subroutine progress(percent, start)
   remaining = int(elapsed*(1.0/percent-1.0))
   bar  = "["//repeat("=",ticks)//repeat(" ",50-ticks)//"]"
   
-  write(*,"(A,I3,'% ',I4,':',I2.2,' elapsed',I4,':',I2.2,' remaining')") &
-    bar, int(percent*100), elapsed/60, mod(elapsed,60), remaining/60, mod(remaining,60)
+  write(*,"(A,I3,'% ',I3,':',I2.2,' elapsed',I3,':',I2.2,' remaining')") &
+    bar, int(percent*100), elapsed/3600, mod(elapsed/60,60), elapsed/3600, mod(remaining/60,60)
   call flush()
 end subroutine progress
