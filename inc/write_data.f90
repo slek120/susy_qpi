@@ -75,7 +75,7 @@ integer          :: start, end, rate
 !     work   real array of dimension nwork.
 !            used as working storage.
 integer            :: minpts, maxpts, neval, ifail
-integer, parameter :: ndim = 2, nfun = 2, nwork = 6000000
+integer, parameter :: ndim = 2, nfun = 4, nwork = 12000000
 real(dp)           :: a(ndim), b(ndim), abserr, relerr, &
                       result(nfun), absest(nfun), work(nwork)
 

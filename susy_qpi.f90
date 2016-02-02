@@ -103,11 +103,11 @@ subroutine write_data(om, del)
       end if
 
       open(dat, file=filename, position="append", status="old")
-        write(dat,*) qx, qy, result(1), result(2)
+        write(dat,*) qx, qy, result(1), result(2), result(3), result(4)
       close(dat)
 
       i=i+1
-      call progress(i/20604.0, start)
+      call progress(i/5151.0, start)
     end do
   end do
 
@@ -138,8 +138,18 @@ subroutine QPI(ndim, z, nfun, f)
 
   call Gmatrix(kx, ky, Gk)
   call Gmatrix(kqx,kqy,Gkq)
+
+! c-band
+! G(k,k)G(k+q,k+q)
   f(1)=dimag(Gk(1)*Gkq(1))
-  f(2)=dimag(Gk(6)*Gkq(6))
+! G(k,k+Q)G(k+Q+q,k+q)
+  f(2)=dimag(Gk(3)*Gkq(9))
+
+! f-band
+! G(k,k)G(k+q,k+q)
+  f(3)=dimag(Gk(6)*Gkq(6))
+! G(k,k+Q)G(k+Q+q,k+q)
+  f(4)=dimag(Gk(4)*Gkq(13))
 
 end subroutine QPI
 
