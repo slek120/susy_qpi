@@ -23,9 +23,9 @@ program susy_qpi
 !   do i=1,4
 !     do j=1,4
 !       do k=0,4
-        call write_data( -15._dp, 0.1_dp)
-        call write_data( -10._dp, 0.1_dp)
-        call write_data( -5._dp, 0.1_dp)
+!         call write_data( -15._dp, 0.1_dp)
+!         call write_data( -10._dp, 0.1_dp)
+!         call write_data( -5._dp, 0.1_dp)
         call write_data(  0._dp, 0.1_dp)
 !       end do
 !     end do
