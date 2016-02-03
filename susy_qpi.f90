@@ -103,7 +103,7 @@ subroutine write_data(om, del)
       end if
 
       open(dat, file=filename, position="append", status="old")
-        write(dat,*) qx, qy, result(1), result(2), result(3), result(4)
+        write(dat,*) qx, qy, result(1), result(2), result(3), result(4), result(5), result(6)
       close(dat)
 
       i=i+1
