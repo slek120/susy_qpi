@@ -139,17 +139,20 @@ subroutine QPI(ndim, z, nfun, f)
   call Gmatrix(kx, ky, Gk)
   call Gmatrix(kqx,kqy,Gkq)
 
-! c-band
-! G(k,k)G(k+q,k+q)
-  f(1)=dimag(Gk(1)*Gkq(1))
-! G(k,k+Q)G(k+Q+q,k+q)
-  f(2)=dimag(Gk(3)*Gkq(9))
+! Gcccc
+  f(1)=dimag(Gk(1)*Gkq(1)+Gk(3)Gkq(9))
+! Gcffc
+  f(2)=dimag(Gk(2)*Gkq(5)+Gk(4)Gkq(13))
 
-! f-band
-! G(k,k)G(k+q,k+q)
-  f(3)=dimag(Gk(6)*Gkq(6))
-! G(k,k+Q)G(k+Q+q,k+q)
-  f(4)=dimag(Gk(4)*Gkq(13))
+! Gffff
+  f(3)=dimag(Gk(6)*Gkq(6)+Gk(8)Gkq(14))
+! Gfccf
+  f(4)=dimag(Gk(5)*Gkq(2)+Gk(7)Gkq(10))
+
+! Gcccf
+  f(5)=dimag(Gk(1)*Gkq(2)+Gk(3)Gkq(10))
+! Gcfff
+  f(6)=dimag(Gk(2)*Gkq(6)+Gk(4)Gkq(14))
 
 end subroutine QPI
 
