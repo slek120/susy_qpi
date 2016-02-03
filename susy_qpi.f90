@@ -140,19 +140,19 @@ subroutine QPI(ndim, z, nfun, f)
   call Gmatrix(kqx,kqy,Gkq)
 
 ! Gcccc
-  f(1)=dimag(Gk(1)*Gkq(1)+Gk(3)Gkq(9))
+  f(1)=dimag(Gk(1)*Gkq(1)+Gk(3)*Gkq(9))
 ! Gcffc
-  f(2)=dimag(Gk(2)*Gkq(5)+Gk(4)Gkq(13))
+  f(2)=dimag(Gk(2)*Gkq(5)+Gk(4)*Gkq(13))
 
 ! Gffff
-  f(3)=dimag(Gk(6)*Gkq(6)+Gk(8)Gkq(14))
+  f(3)=dimag(Gk(6)*Gkq(6)+Gk(8)*Gkq(14))
 ! Gfccf
-  f(4)=dimag(Gk(5)*Gkq(2)+Gk(7)Gkq(10))
+  f(4)=dimag(Gk(5)*Gkq(2)+Gk(7)*Gkq(10))
 
 ! Gcccf
-  f(5)=dimag(Gk(1)*Gkq(2)+Gk(3)Gkq(10))
+  f(5)=dimag(Gk(1)*Gkq(2)+Gk(3)*Gkq(10))
 ! Gcfff
-  f(6)=dimag(Gk(2)*Gkq(6)+Gk(4)Gkq(14))
+  f(6)=dimag(Gk(2)*Gkq(6)+Gk(4)*Gkq(14))
 
 end subroutine QPI
 
